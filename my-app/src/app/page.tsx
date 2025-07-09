@@ -352,7 +352,7 @@ export default function Home() {
 						wordWrap: "break-word",
 						cursor: "pointer",
 					}}
-					onClick={() => setShowOverlay(true)}
+					onClick={() => setShowOverlay((prev) => !prev)}
 				>
 					[human centric ai]
 				</div>
