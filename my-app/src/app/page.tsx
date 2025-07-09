@@ -327,7 +327,8 @@ export default function Home() {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
-	const [showOverlay, setShowOverlay] = useState(false);
+	const [showOverlay, setShowOverlay] = useState(true);
+	const [hcHover, setHcHover] = useState(false);
 
 	return (
 		<div className="flex flex-col items-center min-h-screen bg-background text-foreground font-mono">
@@ -343,7 +344,7 @@ export default function Home() {
 				<div
 					style={{
 						width: 258,
-						color: "#C6C6C6",
+						color: hcHover ? "#8F85FF" : "#C6C6C6",
 						fontSize: 20,
 						fontFamily: "Space Mono, monospace",
 						fontWeight: 400,
@@ -351,8 +352,11 @@ export default function Home() {
 						lineHeight: "24px",
 						wordWrap: "break-word",
 						cursor: "pointer",
+						transition: "color 0.15s",
 					}}
 					onClick={() => setShowOverlay((prev) => !prev)}
+					onMouseEnter={() => setHcHover(true)}
+					onMouseLeave={() => setHcHover(false)}
 				>
 					[human centric ai]
 				</div>
