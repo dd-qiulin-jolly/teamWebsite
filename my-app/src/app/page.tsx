@@ -61,7 +61,7 @@ const focusData = [
 	},
 ];
 
-function FocusPoint({ img, width, height, style, box, target, id }: FocusPointProps & { target: string; id: number }) {
+function FocusPoint({ img, width, height, style, box, target, id, setIsHovering }: FocusPointProps & { target: string; id: number; setIsHovering: (v: boolean) => void }) {
 	const [hover, setHover] = useState(false);
     // Blinking logic: disappear for 0.1s, visible for the rest of the interval
     const [blink, setBlink] = useState(true);
@@ -95,9 +95,10 @@ function FocusPoint({ img, width, height, style, box, target, id }: FocusPointPr
 	};
 	return (
 		<div
+			className="focus-point"
 			style={{ ...style, cursor: `url('/cursor-0.svg'), pointer`, opacity: blink ? 1 : 0, transition: 'opacity 0.1s' }}
-			onMouseEnter={() => setHover(true)}
-			onMouseLeave={() => setHover(false)}
+			onMouseEnter={() => { setHover(true); setIsHovering(true); }}
+			onMouseLeave={() => { setHover(false); setIsHovering(false); }}
 			onClick={handleClick}
 		>
 			<Image src={img} alt="Focus" width={width} height={height} />
@@ -190,11 +191,120 @@ function FocusPoint({ img, width, height, style, box, target, id }: FocusPointPr
 	);
 }
 
+function Overlay({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: 60,
+        left: 18, // keep left margin if needed
+        zIndex: 100,
+        width: 326,
+        background: "#C6C6C6",
+        display: "block", // block layout for full width children
+      }}
+    >
+      <div style={{ width: "100%", padding: 0, margin: 0 }}>
+        <div
+          style={{
+            width: "100%",
+            paddingLeft: 18,
+            paddingRight: 18,
+            paddingTop: 8,
+            paddingBottom: 8,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            boxSizing: "border-box",
+          }}
+        >
+          <button
+            onClick={onClose}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              width: 24,
+              height: 24,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginLeft: "auto",
+            }}
+            aria-label="Close overlay"
+          >
+            <img src="/close.svg" alt="close" width={16} height={16} />
+          </button>
+        </div>
+        <div style={{ width: "100%", height: 1, background: "#101010", margin: 0 }} />
+        <div
+          style={{
+            width: "100%",
+            paddingLeft: 18,
+            paddingRight: 18,
+            paddingTop: 18,
+            paddingBottom: 18,
+            boxSizing: "border-box",
+            display: "flex",
+            flexDirection: "column",
+            gap: 7,
+          }}
+        >
+          <div
+            style={{
+              color: "black",
+              fontSize: 11.2,
+              fontFamily: "Space Mono, monospace",
+              fontWeight: 400,
+              textTransform: "uppercase",
+              lineHeight: "13.44px",
+              wordWrap: "break-word",
+            }}
+          >
+            *hi there!*
+          </div>
+          <div
+            style={{
+              width: 264,
+              color: "black",
+              fontSize: 11.2,
+              fontFamily: "Space Mono, monospace",
+              fontWeight: 400,
+              textTransform: "uppercase",
+              lineHeight: "16.13px",
+              wordWrap: "break-word",
+            }}
+          >
+            welcome to the human-centric ai team!<br />
+            <br />
+            //explain the concept of the hero section in one sentence.<br />
+            <br />
+            scroll down the page to explore more about us.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
 	// For SVG grow effect
 	const totalLength = 1200; // Approximate path length, adjust as needed
 	const [lineProgress, setLineProgress] = useState(0);
 	const lineRef = useRef<SVGPathElement>(null);
+
+	// Cursor logic
+	const [cursorIndex, setCursorIndex] = useState(1); // 1-5 for blank, 0 for hover
+	const [isHovering, setIsHovering] = useState(false);
+
+	// Click on blank space to cycle cursor (only in hero section)
+	const handleHeroBlankClick = (e: React.MouseEvent<HTMLDivElement>) => {
+		if ((e.target as HTMLElement).closest('.focus-point')) return;
+		if (!isHovering) {
+			setCursorIndex((prev) => (prev % 5) + 1);
+		}
+	};
 
 	useEffect(() => {
 		function handleScroll() {
@@ -217,13 +327,19 @@ export default function Home() {
 		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
+	const [showOverlay, setShowOverlay] = useState(false);
+
 	return (
 		<div className="flex flex-col items-center min-h-screen bg-background text-foreground font-mono">
 			{/* Responsive Top Bar */}
 			<div
 				className="w-full flex justify-between items-start mt-6 mb-16 px-1 sm:px-2 lg:px-4"
-				style={{ maxWidth: 1382 }}
+				style={{ maxWidth: 1382, position: "relative" }}
 			>
+				{/* Overlay under left top "human centric ai" */}
+				<div style={{ position: "absolute", top: 0, left: 0, minWidth: 258 }}>
+					{showOverlay && <Overlay onClose={() => setShowOverlay(false)} />}
+				</div>
 				<div
 					style={{
 						width: 258,
@@ -234,7 +350,9 @@ export default function Home() {
 						textTransform: "uppercase",
 						lineHeight: "24px",
 						wordWrap: "break-word",
+						cursor: "pointer",
 					}}
+					onClick={() => setShowOverlay(true)}
 				>
 					[human centric ai]
 				</div>
@@ -280,10 +398,15 @@ export default function Home() {
 					</div>
 				</div>
 			</div>
-			{/* Hero Section with focus points */}
+			{/* Hero Section with focus points and custom cursor */}
 			<section
 				className="flex flex-col items-center justify-center w-full mt-[-40px] mb-16 relative"
-				style={{ height: 800 }}
+				style={{
+					cursor: isHovering 
+						? `url('/cursor-0.svg') 16 16, pointer` 
+						: `url('/cursor-${cursorIndex}.svg') 16 16, auto`,
+					}}
+				onClick={handleHeroBlankClick}
 			>
 				<div
 					id="hero-section"
@@ -303,7 +426,12 @@ export default function Home() {
 						priority
 					/>
 					{focusData.map((f) => (
-						<FocusPoint key={f.id} {...f} id={f.id} />
+						<FocusPoint
+							key={f.id}
+							{...f}
+							id={f.id}
+							setIsHovering={setIsHovering}
+						/>
 					))}
 					{/* Animated SVG line */}
 					<svg
