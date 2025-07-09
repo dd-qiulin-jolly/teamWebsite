@@ -244,8 +244,144 @@ export default function Home() {
 					{focusData.map((f) => (
 						<FocusPoint key={f.id} {...f} />
 					))}
+					{/* Line-1: Connect focus-1 to What we do section using SVG from public */}
+					<Image
+						src="/line-1.svg"
+						alt="Line from focus-1 to What we do"
+						width={879}
+						height={391}
+						style={{
+							position: "absolute",
+							left: 90, // adjust to match focus-1 center
+							top: 500, // adjust to match focus-1 bottom
+							zIndex: 1,
+							pointerEvents: "none",
+						}}
+						priority
+					/>
 				</div>
 			</section>
+
+			{/* What we do section - centered, not full width, new style */}
+			<div
+				style={{
+					width: 1327,
+					height: 1185,
+					paddingTop: 1,
+					paddingBottom: 1,
+					background: "white",
+					outline: "1px #C6C6C6 solid",
+					outlineOffset: "-1px",
+					backdropFilter: "blur(25px)",
+					flexDirection: "column",
+					justifyContent: "flex-start",
+					alignItems: "center",
+					gap: 10,
+					display: "flex",
+					margin: "0 auto",
+				}}
+			>
+				<div
+					style={{
+						width: 1326,
+						height: 96,
+						position: "relative",
+						overflow: "hidden",
+						backdropFilter: "blur(25px)",
+					}}
+				>
+					<div
+						style={{
+							paddingLeft: 18,
+							paddingRight: 18,
+							paddingTop: 8,
+							paddingBottom: 8,
+							left: 591,
+							top: 19,
+							position: "absolute",
+							background: "white",
+							justifyContent: "center",
+							alignItems: "center",
+							gap: 10,
+							display: "inline-flex",
+						}}
+					>
+						<div
+							style={{
+								color: "#101010",
+								fontSize: 24,
+								fontFamily: "Space Mono, monospace",
+								fontWeight: 400,
+								textTransform: "uppercase",
+								lineHeight: "28.80px",
+								wordWrap: "break-word",
+							}}
+						>
+							What we do?
+						</div>
+					</div>
+					<div
+						style={{
+							width: 2.74,
+							height: 2.74,
+							left: 6,
+							top: 5,
+							position: "absolute",
+							background: "#101010",
+						}}
+					/>
+					<div
+						style={{
+							width: 2.74,
+							height: 2.74,
+							left: 6,
+							top: 10.48,
+							position: "absolute",
+							background: "#101010",
+						}}
+					/>
+					<div
+						style={{
+							width: 2.74,
+							height: 2.74,
+							left: 6,
+							top: 15.96,
+							position: "absolute",
+							background: "#101010",
+						}}
+					/>
+					<div
+						style={{
+							width: 2.74,
+							height: 2.74,
+							left: 11.48,
+							top: 10.48,
+							position: "absolute",
+							background: "#101010",
+						}}
+					/>
+					<div
+						style={{
+							width: 2.74,
+							height: 2.74,
+							left: 11.48,
+							top: 5,
+							position: "absolute",
+							background: "#101010",
+						}}
+					/>
+					<div
+						style={{
+							width: 2.74,
+							height: 2.74,
+							left: 16.96,
+							top: 5,
+							position: "absolute",
+							background: "#101010",
+						}}
+					/>
+				</div>
+			</div>
 			{/* ...add more content here for the rest of the page... */}
 		</div>
 	);
