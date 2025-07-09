@@ -402,225 +402,228 @@ export default function Home() {
 					</div>
 				</div>
 			</div>
-			{/* Hero Section with focus points and custom cursor */}
-			<section
-				className="flex flex-col items-center justify-center w-full mt-[-40px] mb-16 relative"
-				style={{
-					cursor: isHovering 
-						? `url('/cursor-0.svg') 16 16, pointer` 
-						: `url('/cursor-${cursorIndex}.svg') 16 16, auto`,
-					}}
-				onClick={handleHeroBlankClick}
-			>
-				<div
-					id="hero-section"
+			{/* Add margin-top to everything below the top bar */}
+			<div style={{ width: '100%', marginTop: 120 }}>
+				{/* Hero Section with focus points and custom cursor */}
+				<section
+					className="flex flex-col items-center justify-center w-full mt-[-40px] mb-16 relative"
 					style={{
-						position: "relative",
-						width: 840,
-						height: 800,
-						top: -40,
-					}}
+						cursor: isHovering 
+							? `url('/cursor-0.svg') 16 16, pointer` 
+							: `url('/cursor-${cursorIndex}.svg') 16 16, auto`,
+						}}
+					onClick={handleHeroBlankClick}
 				>
-					<Image
-						src="/transformer.png"
-						alt="Transformer Hero"
-						width={840}
-						height={840}
-						style={{ objectFit: "contain", width: 840, height: 800 }}
-						priority
-					/>
-					{focusData.map((f) => (
-						<FocusPoint
-							key={f.id}
-							{...f}
-							id={f.id}
-							setIsHovering={setIsHovering}
-						/>
-					))}
-					{/* Animated SVG line */}
-					<svg
-						width="877"
-						height="391"
-						viewBox="0 0 877 391"
-						fill="none"
+					<div
+						id="hero-section"
 						style={{
-							position: "absolute",
-							left: 90,
-							top: 450, // moved up from 520
-							zIndex: 1,
-							pointerEvents: "none",
+							position: "relative",
+							width: 840,
+							height: 800,
+							top: -40,
 						}}
 					>
-						<path
-							d="M1 0V172.5C1 183.546 9.9543 192.5 21 192.5H41C52 192.5 61 201.454 61 212.5V370.5"
-							stroke="#968CFE"
-							strokeWidth="1.5"
-							strokeDasharray={totalLength}
-							strokeDashoffset={totalLength * (1 - lineProgress)}
-							ref={lineRef}
-							style={{
-								transition: "stroke-dashoffset 0.2s linear",
-							}}
+						<Image
+							src="/transformer.png"
+							alt="Transformer Hero"
+							width={840}
+							height={840}
+							style={{ objectFit: "contain", width: 840, height: 800 }}
+							priority
 						/>
-					</svg>
-				</div>
-			</section>
+						{focusData.map((f) => (
+							<FocusPoint
+								key={f.id}
+								{...f}
+								id={f.id}
+								setIsHovering={setIsHovering}
+							/>
+						))}
+						{/* Animated SVG line */}
+						<svg
+							width="877"
+							height="391"
+							viewBox="0 0 877 391"
+							fill="none"
+							style={{
+								position: "absolute",
+								left: 90,
+								top: 450, // moved up from 520
+								zIndex: 1,
+								pointerEvents: "none",
+							}}
+						>
+							<path
+								d="M1 0V172.5C1 183.546 9.9543 192.5 21 192.5H41C52 192.5 61 201.454 61 212.5V370.5"
+								stroke="#968CFE"
+								strokeWidth="1.5"
+								strokeDasharray={totalLength}
+								strokeDashoffset={totalLength * (1 - lineProgress)}
+								ref={lineRef}
+								style={{
+									transition: "stroke-dashoffset 0.2s linear",
+								}}
+							/>
+						</svg>
+					</div>
+				</section>
 
-			{/* What we do section - centered, not full width, new style */}
-			<div
-				id="what-we-do-section"
-				style={{
-					width: '86vw', // Responsive width
-					maxWidth: 1327,
-					height: 1185,
-					paddingTop: 1,
-					paddingBottom: 1,
-					background: "white",
-					outline: "1px #C6C6C6 solid",
-					outlineOffset: "-1px",
-					backdropFilter: "blur(25px)",
-					flexDirection: "column",
-					justifyContent: "flex-start",
-					alignItems: "center",
-					gap: 10,
-					display: "flex",
-					margin: "-84px auto 0 auto", // move up by 60px
-				}}
-			>
+				{/* What we do section - centered, not full width, new style */}
 				<div
+					id="what-we-do-section"
 					style={{
-						width: 1326,
-						height: 96,
-						position: "relative",
-						overflow: "hidden",
+						width: '86vw', // Responsive width
+						maxWidth: 1327,
+						height: 1185,
+						paddingTop: 1,
+						paddingBottom: 1,
+						background: "white",
+						outline: "1px #C6C6C6 solid",
+						outlineOffset: "-1px",
 						backdropFilter: "blur(25px)",
+						flexDirection: "column",
+						justifyContent: "flex-start",
+						alignItems: "center",
+						gap: 10,
+						display: "flex",
+						margin: "-84px auto 0 auto", // move up by 60px
 					}}
 				>
 					<div
 						style={{
-							paddingLeft: 18,
-							paddingRight: 18,
-							paddingTop: 8,
-							paddingBottom: 8,
-							left: 591,
-							top: 19,
-							position: "absolute",
-							background: "white",
-							justifyContent: "center",
-							alignItems: "center",
-							gap: 10,
-							display: "inline-flex",
+							width: 1326,
+							height: 96,
+							position: "relative",
+							overflow: "hidden",
+							backdropFilter: "blur(25px)",
 						}}
 					>
 						<div
 							style={{
-								color: "#101010",
-								fontSize: 24,
-								fontFamily: "Space Mono, monospace",
-								fontWeight: 400,
-								textTransform: "uppercase",
-								lineHeight: "28.80px",
-								wordWrap: "break-word",
+								paddingLeft: 18,
+								paddingRight: 18,
+								paddingTop: 8,
+								paddingBottom: 8,
+								left: 591,
+								top: 19,
+								position: "absolute",
+								background: "white",
+								justifyContent: "center",
+								alignItems: "center",
+								gap: 10,
+								display: "inline-flex",
 							}}
 						>
-							What we do?
+							<div
+								style={{
+									color: "#101010",
+									fontSize: 24,
+									fontFamily: "Space Mono, monospace",
+									fontWeight: 400,
+									textTransform: "uppercase",
+									lineHeight: "28.80px",
+									wordWrap: "break-word",
+								}}
+							>
+								What we do?
+							</div>
 						</div>
+						<div
+							style={{
+								width: 2.74,
+								height: 2.74,
+								left: 6,
+								top: 5,
+								position: "absolute",
+								background: "#101010",
+							}}
+						/>
+						<div
+							style={{
+								width: 2.74,
+								height: 2.74,
+								left: 6,
+								top: 10.48,
+								position: "absolute",
+								background: "#101010",
+							}}
+						/>
+						<div
+							style={{
+								width: 2.74,
+								height: 2.74,
+								left: 6,
+								top: 15.96,
+								position: "absolute",
+								background: "#101010",
+							}}
+						/>
+						<div
+							style={{
+								width: 2.74,
+								height: 2.74,
+								left: 11.48,
+								top: 10.48,
+								position: "absolute",
+								background: "#101010",
+							}}
+						/>
+						<div
+							style={{
+								width: 2.74,
+								height: 2.74,
+								left: 11.48,
+								top: 5,
+								position: "absolute",
+								background: "#101010",
+							}}
+						/>
+						<div
+							style={{
+								width: 2.74,
+								height: 2.74,
+								left: 16.96,
+								top: 5,
+								position: "absolute",
+								background: "#101010",
+							}}
+						/>
 					</div>
-					<div
-						style={{
-							width: 2.74,
-							height: 2.74,
-							left: 6,
-							top: 5,
-							position: "absolute",
-							background: "#101010",
-						}}
-					/>
-					<div
-						style={{
-							width: 2.74,
-							height: 2.74,
-							left: 6,
-							top: 10.48,
-							position: "absolute",
-							background: "#101010",
-						}}
-					/>
-					<div
-						style={{
-							width: 2.74,
-							height: 2.74,
-							left: 6,
-							top: 15.96,
-							position: "absolute",
-							background: "#101010",
-						}}
-					/>
-					<div
-						style={{
-							width: 2.74,
-							height: 2.74,
-							left: 11.48,
-							top: 10.48,
-							position: "absolute",
-							background: "#101010",
-						}}
-					/>
-					<div
-						style={{
-							width: 2.74,
-							height: 2.74,
-							left: 11.48,
-							top: 5,
-							position: "absolute",
-							background: "#101010",
-						}}
-					/>
-					<div
-						style={{
-							width: 2.74,
-							height: 2.74,
-							left: 16.96,
-							top: 5,
-							position: "absolute",
-							background: "#101010",
-						}}
-					/>
+					{/* Draggable Project Frames - now inside the What we do section */}
+					<div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: 80 }}>
+						<DraggableProjects />
+					</div>
 				</div>
-				{/* Draggable Project Frames - now inside the What we do section */}
-				<div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: 80 }}>
-					<DraggableProjects />
-				</div>
-			</div>
 
-			{/* Animated SVG line between sections */}
-			<SectionLine lineProgress={lineProgress} totalLength={totalLength} />
-			{/* Section 2 */}
-			<div id="section-2">
-				<SectionFrame title="Section 2" />
+				{/* Animated SVG line between sections */}
+				<SectionLine lineProgress={lineProgress} totalLength={totalLength} />
+				{/* Section 2 */}
+				<div id="section-2">
+					<SectionFrame title="Section 2" />
+				</div>
+				{/* Animated SVG line between sections */}
+				<SectionLine lineProgress={lineProgress} totalLength={totalLength} />
+				{/* Section 3 */}
+				<div id="section-3">
+					<SectionFrame title="Section 3" />
+				</div>
+				<footer
+					style={{
+						background: "#000",
+						color: "#fff",
+						height: 320,
+						width: "100%",
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center",
+						fontSize: 24,
+						fontWeight: 500,
+						letterSpacing: 1,
+					}}
+				>
+					<div>Footer</div>
+				</footer>
 			</div>
-			{/* Animated SVG line between sections */}
-			<SectionLine lineProgress={lineProgress} totalLength={totalLength} />
-			{/* Section 3 */}
-			<div id="section-3">
-				<SectionFrame title="Section 3" />
-			</div>
-			<footer
-				style={{
-					background: "#000",
-					color: "#fff",
-					height: 320,
-					width: "100%",
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-					fontSize: 24,
-					fontWeight: 500,
-					letterSpacing: 1,
-				}}
-			>
-				<div>Footer</div>
-			</footer>
 		</div>
 	);
 }
@@ -628,10 +631,10 @@ export default function Home() {
 // DraggableProjects component for three draggable frames
 function DraggableProjects() {
 	const initialPositions = [
-		{ x: 0, y: 120 },
-		{ x: 220, y: 180 },
-		{ x: 440, y: 240 },
-		{ x: 660, y: 300 },
+		{ x: 60, y: 80 },    // Project 1: top left
+		{ x: 220, y: 120 }, // Project 2: upper middle, overlaps 1
+		{ x: 340, y: 200 }, // Project 3: center, overlaps 2
+		{ x: 100, y: 320 }, // Project 4: lower left, not far right
 	];
 	const [positions, setPositions] = useState(initialPositions);
 	const [dragging, setDragging] = useState([-1, -1, -1, -1]);
@@ -683,10 +686,10 @@ function DraggableProjects() {
 	const frameW = 607 * 0.8; // ~486
 	const frameH = frameW * 9 / 16; // 16:9 ratio
 	const defaultOffsets = [
-		{ x: 0, y: 0 },
-		{ x: 100, y: 30 },
-		{ x: 50, y: 100 },
-		{ x: 160, y: 80 },
+		{ x: 60, y: 80 },    // Project 1: top left
+		{ x: 220, y: 120 },  // Project 2: upper middle, overlaps 1
+		{ x: 340, y: 200 },  // Project 3: center, overlaps 2
+		{ x: 100, y: 320 },  // Project 4: lower left, not far right
 	];
 	return (
 		<div style={{ position: "relative", width: 900, height: 400 }}>
