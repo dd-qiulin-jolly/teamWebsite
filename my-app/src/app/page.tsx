@@ -446,15 +446,15 @@ export default function Home() {
 						style={{
 							position: "absolute",
 							left: 90,
-							top: 520,
+							top: 450, // moved up from 520
 							zIndex: 1,
 							pointerEvents: "none",
 						}}
 					>
 						<path
-							d="M1 0V192.5C1 203.546 9.9543 212.5 21 212.5H855.5C866.546 212.5 875.5 221.454 875.5 232.5V390.5"
+							d="M1 0V172.5C1 183.546 9.9543 192.5 21 192.5H41C52 192.5 61 201.454 61 212.5V370.5"
 							stroke="#968CFE"
-							strokeWidth="2"
+							strokeWidth="1.5"
 							strokeDasharray={totalLength}
 							strokeDashoffset={totalLength * (1 - lineProgress)}
 							ref={lineRef}
@@ -484,7 +484,7 @@ export default function Home() {
 					alignItems: "center",
 					gap: 10,
 					display: "flex",
-					margin: "0 auto",
+					margin: "-84px auto 0 auto", // move up by 60px
 				}}
 			>
 				<div
@@ -631,9 +631,10 @@ function DraggableProjects() {
 		{ x: 0, y: 120 },
 		{ x: 220, y: 180 },
 		{ x: 440, y: 240 },
+		{ x: 660, y: 300 },
 	];
 	const [positions, setPositions] = useState(initialPositions);
-	const [dragging, setDragging] = useState([-1, -1, -1]);
+	const [dragging, setDragging] = useState([-1, -1, -1, -1]);
 	const [offset, setOffset] = useState({ x: 0, y: 0 });
 
 	const handleMouseDown = (idx: number, e: React.MouseEvent<HTMLDivElement>) => {
@@ -645,7 +646,7 @@ function DraggableProjects() {
 		document.body.style.userSelect = "none";
 	};
 	const handleMouseUp = () => {
-		setDragging([-1, -1, -1]);
+		setDragging([-1, -1, -1, -1]);
 		document.body.style.userSelect = "auto";
 	};
 	const handleMouseMove = (e: MouseEvent) => {
@@ -676,6 +677,16 @@ function DraggableProjects() {
 		"PROJECT NAME 1",
 		"PROJECT NAME 2",
 		"PROJECT NAME 3",
+		"PROJECT NAME 4",
+	];
+	// 16:9 ratio, smaller (x0.8), less structured layout
+	const frameW = 607 * 0.8; // ~486
+	const frameH = frameW * 9 / 16; // 16:9 ratio
+	const defaultOffsets = [
+		{ x: 0, y: 0 },
+		{ x: 100, y: 30 },
+		{ x: 50, y: 100 },
+		{ x: 160, y: 80 },
 	];
 	return (
 		<div style={{ position: "relative", width: 900, height: 400 }}>
@@ -684,18 +695,18 @@ function DraggableProjects() {
 					key={name}
 					style={{
 						position: "absolute",
-						left: positions[idx].x,
-						top: positions[idx].y,
+						left: positions[idx]?.x ?? defaultOffsets[idx].x,
+						top: positions[idx]?.y ?? defaultOffsets[idx].y,
 						cursor: "grab",
 						zIndex: dragging[0] === idx ? 10 : 1,
 					}}
 					onMouseDown={e => handleMouseDown(idx, e)}
 				>
-					<div style={{width: 607, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex', fontFamily: 'Space Mono, monospace'}}>
-						<div style={{height: 34, paddingLeft: 12, paddingRight: 12, paddingTop: 6, paddingBottom: 6, background: '#5241FF', justifyContent: 'center', alignItems: 'center', gap: 10, display: 'inline-flex'}}>
-							<div style={{color: 'white', fontSize: 20, fontFamily: 'Space Mono, monospace', fontWeight: '400', textTransform: 'uppercase', lineHeight: '24px', wordWrap: 'break-word'}}>{name}</div>
+					<div style={{width: frameW, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex', fontFamily: 'Space Mono, monospace'}}>
+						<div style={{height: 34 * 0.8, paddingLeft: 12 * 0.8, paddingRight: 12 * 0.8, paddingTop: 6 * 0.8, paddingBottom: 6 * 0.8, background: '#5241FF', justifyContent: 'center', alignItems: 'center', gap: 10, display: 'inline-flex'}}>
+							<div style={{color: 'white', fontSize: 20 * 0.8, fontFamily: 'Space Mono, monospace', fontWeight: '400', textTransform: 'uppercase', lineHeight: '24px', wordWrap: 'break-word'}}>{name}</div>
 						</div>
-						<div style={{alignSelf: 'stretch', height: 339, position: 'relative', border: '1px #5241FF solid'}} />
+						<div style={{alignSelf: 'stretch', height: frameH, position: 'relative', border: '1px #5241FF solid'}} />
 					</div>
 				</div>
 			))}
