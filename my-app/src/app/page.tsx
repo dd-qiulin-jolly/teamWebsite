@@ -25,8 +25,8 @@ const focusData = [
 		style: { position: "absolute" as const, left: 40, top: 400, zIndex: 2 },
 		target: "what-we-do-section",
 		box: {
-			title: "input",
-			desc: "so here is the short explanation of what we mean by input",
+			title: "output", // changed from 'input' to 'output'
+			desc: "so here is the short explanation of what we mean by output", // changed to match title
 		},
 	},
 	{
@@ -55,8 +55,8 @@ const focusData = [
 		style: { position: "absolute" as const, right: 100, top: 200, zIndex: 2 },
 		target: "section-3",
 		box: {
-			title: "output",
-			desc: "so here is the short explanation of what we mean by output",
+			title: "input", // changed from 'output' to 'input'
+			desc: "so here is the short explanation of what we mean by input", // changed to match title
 		},
 	},
 ];
@@ -159,11 +159,11 @@ function FocusPoint({ img, width, height, style, box, target, id, setIsHovering 
 								style={{
 									alignSelf: "stretch",
 									color: "black",
-									fontSize: 11.2,
+									fontSize: 14,
 									fontFamily: "Space Mono, monospace",
 									fontWeight: 400,
 									textTransform: "uppercase",
-									lineHeight: "13.44px",
+									lineHeight: "18px",
 									wordWrap: "break-word",
 								}}
 							>
@@ -173,11 +173,11 @@ function FocusPoint({ img, width, height, style, box, target, id, setIsHovering 
 								style={{
 									alignSelf: "stretch",
 									color: "black",
-									fontSize: 11.2,
+									fontSize: 14,
 									fontFamily: "Space Mono, monospace",
 									fontWeight: 400,
 									textTransform: "uppercase",
-									lineHeight: "13.44px",
+									lineHeight: "18px",
 									wordWrap: "break-word",
 								}}
 							>
@@ -254,11 +254,11 @@ function Overlay({ onClose }: { onClose: () => void }) {
           <div
             style={{
               color: "black",
-              fontSize: 11.2,
+              fontSize: 14,
               fontFamily: "Space Mono, monospace",
               fontWeight: 400,
               textTransform: "uppercase",
-              lineHeight: "13.44px",
+              lineHeight: "18px",
               wordWrap: "break-word",
             }}
           >
@@ -268,11 +268,11 @@ function Overlay({ onClose }: { onClose: () => void }) {
             style={{
               width: 264,
               color: "black",
-              fontSize: 11.2,
+              fontSize: 14,
               fontFamily: "Space Mono, monospace",
               fontWeight: 400,
               textTransform: "uppercase",
-              lineHeight: "16.13px",
+              lineHeight: "18px",
               wordWrap: "break-word",
             }}
           >
@@ -707,7 +707,7 @@ function DraggableProjects() {
 				>
 					<div style={{width: frameW, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex', fontFamily: 'Space Mono, monospace'}}>
 						<div style={{height: 34 * 0.8, paddingLeft: 12 * 0.8, paddingRight: 12 * 0.8, paddingTop: 6 * 0.8, paddingBottom: 6 * 0.8, background: '#5241FF', justifyContent: 'center', alignItems: 'center', gap: 10, display: 'inline-flex'}}>
-							<div style={{color: 'white', fontSize: 20 * 0.8, fontFamily: 'Space Mono, monospace', fontWeight: '400', textTransform: 'uppercase', lineHeight: '24px', wordWrap: 'break-word'}}>{name}</div>
+							<div style={{color: 'white', fontSize: 14, fontFamily: 'Space Mono, monospace', fontWeight: '400', textTransform: 'uppercase', lineHeight: '18px', wordWrap: 'break-word'}}>{name}</div>
 						</div>
 						<div style={{alignSelf: 'stretch', height: frameH, position: 'relative', border: '1px #5241FF solid'}} />
 					</div>
