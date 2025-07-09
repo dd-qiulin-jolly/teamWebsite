@@ -61,8 +61,32 @@ const focusData = [
 	},
 ];
 
-function FocusPoint({ img, width, height, style, box, target }: FocusPointProps & { target: string }) {
+function FocusPoint({ img, width, height, style, box, target, id }: FocusPointProps & { target: string; id: number }) {
 	const [hover, setHover] = useState(false);
+    // Blinking logic: disappear for 0.1s, visible for the rest of the interval
+    const [blink, setBlink] = useState(true);
+    useEffect(() => {
+        let visibleDuration = 3000, blinkDuration = 100;
+        if (id === 2) visibleDuration = 8000;
+        if (id === 3) visibleDuration = 8000;
+        let timeout: NodeJS.Timeout;
+        let interval: NodeJS.Timeout;
+        function startBlinkCycle() {
+            setBlink(true);
+            timeout = setTimeout(() => {
+                setBlink(false);
+                timeout = setTimeout(() => {
+                    setBlink(true);
+                }, blinkDuration);
+            }, visibleDuration - blinkDuration);
+        }
+        startBlinkCycle();
+        interval = setInterval(startBlinkCycle, visibleDuration);
+        return () => {
+            clearTimeout(timeout);
+            clearInterval(interval);
+        };
+    }, [id]);
 	const handleClick = () => {
 		const el = document.getElementById(target);
 		if (el) {
@@ -71,7 +95,7 @@ function FocusPoint({ img, width, height, style, box, target }: FocusPointProps 
 	};
 	return (
 		<div
-			style={{ ...style, cursor: `url('/cursor-0.svg'), pointer` }}
+			style={{ ...style, cursor: `url('/cursor-0.svg'), pointer`, opacity: blink ? 1 : 0, transition: 'opacity 0.1s' }}
 			onMouseEnter={() => setHover(true)}
 			onMouseLeave={() => setHover(false)}
 			onClick={handleClick}
@@ -279,7 +303,7 @@ export default function Home() {
 						priority
 					/>
 					{focusData.map((f) => (
-						<FocusPoint key={f.id} {...f} />
+						<FocusPoint key={f.id} {...f} id={f.id} />
 					))}
 					{/* Animated SVG line */}
 					<svg
@@ -314,7 +338,8 @@ export default function Home() {
 			<div
 				id="what-we-do-section"
 				style={{
-					width: 1327,
+					width: '86vw', // Responsive width
+					maxWidth: 1327,
 					height: 1185,
 					paddingTop: 1,
 					paddingBottom: 1,
@@ -585,7 +610,8 @@ function SectionFrame({ title }: { title: string }) {
 	return (
 		<div
 			style={{
-				width: 1327,
+				width: '86vw', // Responsive width
+				maxWidth: 1327,
 				height: 1185,
 				paddingTop: 1,
 				paddingBottom: 1,
