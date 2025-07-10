@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, CSSProperties } from "react";
+import { useEffect, useRef, useState, CSSProperties, useLayoutEffect } from "react";
 
 interface FocusBox {
 	title: string;
@@ -71,7 +71,7 @@ function FocusPoint({ img, width, height, style, box, target, id, setIsHovering 
         if (id === 2) visibleDuration = 8000;
         if (id === 3) visibleDuration = 8000;
         let timeout: NodeJS.Timeout;
-        const interval = setInterval(startBlinkCycle, visibleDuration);
+        let interval: NodeJS.Timeout;
         function startBlinkCycle() {
             setBlink(true);
             timeout = setTimeout(() => {
@@ -82,6 +82,7 @@ function FocusPoint({ img, width, height, style, box, target, id, setIsHovering 
             }, visibleDuration - blinkDuration);
         }
         startBlinkCycle();
+        interval = setInterval(startBlinkCycle, visibleDuration);
         return () => {
             clearTimeout(timeout);
             clearInterval(interval);
@@ -285,7 +286,7 @@ function Overlay({ onClose }: { onClose: () => void }) {
             scroll down the page to explore more about us.
           </div>
           {/* Add logo-dot.svg under the text */}
-          <Image src="/logo-dot.svg" alt="logo dot" width={48} height={48} style={{ marginTop: 8 }} />
+          <img src="/logo-dot.svg" alt="logo dot" width={48} height={48} style={{ marginTop: 8 }} />
         </div>
       </div>
     </div>
@@ -475,23 +476,21 @@ export default function Home() {
 				>
 					{/* Render placed cursor images */}
 					{placedCursors.map((c, i) => (
-            <Image
-              key={i}
-              src={`/cursor-${c.index}.svg`}
-              alt={`cursor-${c.index}`}
-              style={{
-                position: 'absolute',
-                left: c.x - 60,
-                top: c.y - 60,
-                width: 110,
-                height: 110,
-                pointerEvents: 'none',
-                zIndex: 10,
-              }}
-              width={110}
-              height={110}
-            />
-          ))}
+						<img
+							key={i}
+							src={`/cursor-${c.index}.svg`}
+							alt={`cursor-${c.index}`}
+							style={{
+								position: 'absolute',
+								left: c.x - 60, // center the larger image (120/2)
+								top: c.y - 60,
+								width: 110,
+								height: 110,
+								pointerEvents: 'none',
+								zIndex: 10,
+							}}
+						/>
+					))}
 					<div
 						id="hero-section"
 						style={{
@@ -595,7 +594,7 @@ export default function Home() {
 								fontSize: 14,
 								fontFamily: 'Space Mono, monospace',
 								fontWeight: 400,
-							 textTransform: 'uppercase',
+								textTransform: 'uppercase',
 								letterSpacing: 1,
 								textAlign: 'center',
 								// Add padding to the header to prevent the title from overlapping the border
