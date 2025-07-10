@@ -66,7 +66,8 @@ function FocusPoint({ img, width, height, style, box, target, id, setIsHovering 
     // Blinking logic: disappear for 0.1s, visible for the rest of the interval
     const [blink, setBlink] = useState(true);
     useEffect(() => {
-        let visibleDuration = 3000, blinkDuration = 100;
+        let visibleDuration = 3000;
+        const blinkDuration = 100;
         if (id === 2) visibleDuration = 8000;
         if (id === 3) visibleDuration = 8000;
         let timeout: NodeJS.Timeout;
@@ -280,7 +281,7 @@ function Overlay({ onClose }: { onClose: () => void }) {
           >
             welcome to the human-centric ai team!<br />
             <br />
-            //explain the concept of the hero section in one sentence.<br />
+            {/* explain the concept of the hero section in one sentence. */}<br />
             <br />
             scroll down the page to explore more about us.
           </div>
@@ -295,8 +296,8 @@ function Overlay({ onClose }: { onClose: () => void }) {
 export default function Home() {
 	// For SVG grow effect
 	const totalLength = 1200; // Approximate path length, adjust as needed
-	const [lineProgress, setLineProgress] = useState(0);
-	const [delayedLineProgress, setDelayedLineProgress] = useState(0);
+	const [lineProgress, ] = useState(0);
+	const [, ] = useState(0);
 	const lineRef = useRef<SVGPathElement>(null);
 
 	// Cursor logic
@@ -304,9 +305,8 @@ export default function Home() {
 	const [isHovering, setIsHovering] = useState(false);
 
 	// 👈 ADD THE NEW STATES HERE:
-	const [valuesHovering, setValuesHovering] = useState(false);
+	const [, ] = useState(false);
 	const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-	const [targetDimensions, setTargetDimensions] = useState({ width: 40, height: 40 });
 
 	// Add state to store placed cursors in the hero section
 	const [placedCursors, setPlacedCursors] = useState<{x: number, y: number, index: number}[]>([]);
@@ -346,10 +346,10 @@ export default function Home() {
 			// 2. What We Do to Section 2 (delayed, slower)
 			const whatWeDo = document.getElementById('what-we-do-section');
 			const section2 = document.getElementById('section-2');
-			let whatWeDoEnd = whatWeDo ? (whatWeDo.getBoundingClientRect().bottom + window.scrollY) : 1200;
-			let section2Top = section2 ? (section2.getBoundingClientRect().top + window.scrollY) : 1800;
-			let triggerStart2 = whatWeDoEnd - windowH * 0.2;
-			let triggerEnd2 = section2Top - windowH * 0.3;
+			const whatWeDoEnd = whatWeDo ? (whatWeDo.getBoundingClientRect().bottom + window.scrollY) : 1200;
+			const section2Top = section2 ? (section2.getBoundingClientRect().top + window.scrollY) : 1800;
+			const triggerStart2 = whatWeDoEnd - windowH * 0.2;
+			const triggerEnd2 = section2Top - windowH * 0.3;
 			let progress2 = 0;
 			if (scrollTop < triggerStart2) progress2 = 0;
 			else if (scrollTop > triggerEnd2) progress2 = 1;
@@ -358,10 +358,10 @@ export default function Home() {
 
 			// 3. Section 2 to Section 3 (delayed, independent)
 			const section3Div = document.getElementById('section-3');
-			let section2End = section2 ? (section2.getBoundingClientRect().bottom + window.scrollY) : 2200;
-			let section3Top2 = section3Div ? (section3Div.getBoundingClientRect().top + window.scrollY) : 2600;
-			let triggerStart3 = section2End - windowH * 0.2;
-			let triggerEnd3 = section3Top2 - windowH * 0.3;
+			const section2End = section2 ? (section2.getBoundingClientRect().bottom + window.scrollY) : 2200;
+			const section3Top2 = section3Div ? (section3Div.getBoundingClientRect().top + window.scrollY) : 2600;
+			const triggerStart3 = section2End - windowH * 0.2;
+			const triggerEnd3 = section3Top2 - windowH * 0.3;
 			let progress3 = 0;
 			if (scrollTop < triggerStart3) progress3 = 0;
 			else if (scrollTop > triggerEnd3) progress3 = 1;
@@ -384,9 +384,9 @@ export default function Home() {
 	const [showOverlay, setShowOverlay] = useState(true);
 	const [hcHover, setHcHover] = useState(false);
 
-	const [lineProgress1, setLineProgress1] = useState(0);
-	const [lineProgress2, setLineProgress2] = useState(0);
-	const [lineProgress3, setLineProgress3] = useState(0);
+	const [, setLineProgress1] = useState(0);
+	const [, setLineProgress2] = useState(0);
+	const [, setLineProgress3] = useState(0);
 
 	return (
 		<div className="flex flex-col items-center min-h-screen bg-background text-foreground font-mono" style={{ cursor: 'none' }}>
@@ -622,32 +622,16 @@ export default function Home() {
 					</div>
 				</div>
 
-				{/* Animated SVG line */}
-				{/* <SectionLine
-					lineProgress={lineProgress1}
-					totalLength={totalLength}
-					path="M1 0V172.5C1 183.546 9.9543 192.5 21 192.5H350C361 192.5 370 201.454 370 212.5V370.5"
-					style={{
-						position: 'absolute',
-						left: 800,
-						top: 863,
-						transform: 'translateX(-50%)', // center horizontally in hero section
-						zIndex: 1,
-						pointerEvents: 'none',
-					}}
-					strokeWidth={2}
-				/> */}
+				
 
 				{/* Gap and connector: What we do → Section 2 */}
 				<div style={{ width: '100%', height: 320, position: 'relative' }}>
-					{/* <SectionConnector fromId="what-we-do-section" toId="section-2" lineProgress={lineProgress2} totalLength={totalLength} strokeWidth={4} /> */}
 				</div>
 				{/* Section 2 */}
 				<div id="section-2">
 					<SectionFrame title="OUR VALUES" cursorPosition={cursorPosition} />
 				</div>
 				<div style={{ width: 2, height: 220, position: 'relative' }}>
-					{/* <SectionConnector fromId="section-2" toId="section-3" lineProgress={lineProgress3} totalLength={totalLength} strokeWidth={2} curve={0} /> */}
 				</div>
 				{/* Section 3 */}
 				<div id="section-3" style={{ marginBottom: 360 }}>
@@ -774,68 +758,6 @@ function SectionLine({ lineProgress, totalLength, path, style, strokeWidth = 2 }
 	);
 }
 
-// SectionConnector component for dynamic lines between sections
-function SectionConnector({
-  fromId,
-  toId,
-  lineProgress,
-  totalLength,
-  curve = 0.5,
-  strokeWidth = 2, // default to 2, can be overridden
-}: {
-  fromId: string;
-  toId: string;
-  lineProgress: number;
-  totalLength: number;
-  curve?: number;
-  strokeWidth?: number;
-}) {
-  const gapRef = useRef<HTMLDivElement>(null);
-  const [coords, setCoords] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(null);
-  useLayoutEffect(() => {
-    const from = document.getElementById(fromId);
-    const to = document.getElementById(toId);
-    const gap = gapRef.current;
-    if (from && to && gap) {
-      const fromRect = from.getBoundingClientRect();
-      const toRect = to.getBoundingClientRect();
-      const gapRect = gap.getBoundingClientRect();
-      // Start at bottom center of from, end at top center of to, both relative to gap
-      setCoords({
-        x1: fromRect.left + fromRect.width / 2 - gapRect.left,
-        y1: 0,
-        x2: toRect.left + toRect.width / 2 - gapRect.left,
-        y2: gapRect.height,
-      });
-    }
-  }, [fromId, toId]);
-  if (!coords) return <div ref={gapRef} style={{ width: '100%', height: '100%', position: 'relative' }} />;
-  const width = Math.max(Math.abs(coords.x2 - coords.x1), 1);
-  const height = Math.max(Math.abs(coords.y2 - coords.y1), 1);
-  const left = Math.min(coords.x1, coords.x2);
-  // Control point for quadratic curve
-  const cx = (coords.x1 + coords.x2) / 2;
-  const cy = height * curve;
-  return (
-    <div ref={gapRef} style={{ width: '100%', height: '100%', position: 'relative' }}>
-      <svg
-        width={width}
-        height={height}
-        style={{ position: "absolute", left, top: 0, pointerEvents: "none", zIndex: 2 }}
-      >
-        <path
-          d={`M${coords.x1 < coords.x2 ? 0 : width},0 Q${cx - left},${cy} ${coords.x1 < coords.x2 ? width : 0},${height}`}
-          stroke="#968CFE"
-          strokeWidth={strokeWidth}
-          fill="none"
-          strokeDasharray={totalLength}
-          strokeDashoffset={totalLength * (1 - lineProgress)}
-          style={{ transition: "stroke-dashoffset 0.2s linear" }}
-        />
-      </svg>
-    </div>
-  );
-}
 
 // SectionFrame component for individual section frames
 function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: string, cursorPosition?: { x: number, y: number } }) {
