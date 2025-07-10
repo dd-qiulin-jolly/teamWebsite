@@ -441,23 +441,25 @@ export default function Home() {
 							wordWrap: "break-word",
 						}}
 					>
-						[coe]
+						coe
 					</div>
 					<div
-						style={{
-							alignSelf: "stretch",
-							textAlign: "right",
-							color: "#8F85FF",
-							fontSize: 20,
-							fontFamily: "Space Mono, monospace",
-							fontWeight: 400,
-							textTransform: "uppercase",
-							lineHeight: "24px",
-							wordWrap: "break-word",
-						}}
-					>
-						&gt;_contact
-					</div>
+					style={{
+						alignSelf: "stretch",
+						textAlign: "right",
+						color: "#8F85FF",
+						fontSize: 20,
+						fontFamily: "Space Mono, monospace",
+						fontWeight: 400,
+						textTransform: "uppercase",
+						lineHeight: "24px",
+						wordWrap: "break-word",
+						cursor: "pointer",
+					}}
+					onClick={() => window.open("mailto:abdo.hassan@decathlon.com", "_blank")}
+				>
+					&gt;_contact
+				</div>
 				</div>
 			</div>
 			{/* Add margin-top to everything below the top bar */}
@@ -663,7 +665,7 @@ export default function Home() {
 						fontSize: 24,
 						fontWeight: 500,
 						letterSpacing: 1,
-						marginTop: 120, // Added margin on top of the footer
+						marginTop: 380, // Added margin on top of the footer
 					}}
 				>
 					<div>Footer</div>
@@ -979,7 +981,7 @@ function SectionFrame({ title }: { title: string }) {
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
-						margin: '0 auto',
+						margin: '0 auto 0 auto',
 						position: 'relative',
 						cursor: 'none',
 					}}
@@ -1137,7 +1139,7 @@ if (title === "PEOPLE") {
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
-				margin: '0 auto',
+				margin: '80px auto 0 auto',
 				position: 'relative',
 			}}
 		>
