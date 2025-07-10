@@ -25,7 +25,7 @@ const focusData = [
 		style: { position: "absolute" as const, left: 90, top: 590, zIndex: 2 }, // moved down from 400 to 480
 		target: "what-we-do-section",
 		box: {
-			title: "output", // changed from 'input' to 'output'
+			title: "output layer", // changed from 'input' to 'output'
 			desc: "so here is the short explanation of what we mean by output", // changed to match title
 		},
 	},
@@ -43,7 +43,7 @@ const focusData = [
 		},
 		target: "section-2",
 		box: {
-			title: "process",
+			title: "hidden layer",
 			desc: "so here is the short explanation of what we mean by process",
 		},
 	},
@@ -55,7 +55,7 @@ const focusData = [
 		style: { position: "absolute" as const, right: 100, top: 200, zIndex: 2 },
 		target: "section-3",
 		box: {
-			title: "input", // changed from 'output' to 'input'
+			title: "input layer", // changed from 'output' to 'input'
 			desc: "so here is the short explanation of what we mean by input", // changed to match title
 		},
 	},
@@ -896,11 +896,11 @@ function SectionFrame({ title }: { title: string }) {
 
 	if (title === "OUR VALUES") {
 		const values = [
-			{ icon: "/icon-1.svg", keyword: "Integrity", statement: "We act with honesty and adhere to the highest standards of moral and ethical values." },
-			{ icon: "/icon-2.svg", keyword: "Innovation", statement: "We embrace new ideas and drive creative solutions for our clients." },
-			{ icon: "/icon-3.svg", keyword: "Collaboration", statement: "We believe teamwork and open communication lead to the best results." },
-			{ icon: "/icon-4.svg", keyword: "Diversity", statement: "We value diverse perspectives and foster an inclusive environment." },
-			{ icon: "/icon-5.svg", keyword: "Excellence", statement: "We strive for the highest quality in everything we do." },
+			{ icon: "/icon-1.svg", keyword: "Future-proof", statement: "We act with honesty and adhere to the highest standards of moral and ethical values." },
+			{ icon: "/icon-2.svg", keyword: "Responsibility", statement: "We embrace new ideas and drive creative solutions for our clients." },
+			{ icon: "/icon-3.svg", keyword: "Participatory", statement: "We believe teamwork and open communication lead to the best results." },
+			{ icon: "/icon-4.svg", keyword: "Tech x Design", statement: "We value diverse perspectives and foster an inclusive environment." },
+			{ icon: "/icon-5.svg", keyword: "Playful", statement: "We strive for the highest quality in everything we do." },
 		];
 
 		return (
@@ -1086,32 +1086,32 @@ function SectionFrame({ title }: { title: string }) {
 if (title === "PEOPLE") {
 	const people = [
 		{
-			name: "NAME",
-			role: "ROLE",
+			name: "Abdo HASSAN",
+			role: "Human-Centric AI Manager",
 			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
 			img: "/profile-a.png",
 		},
 		{ 
-			name: "NAME", 
-			role: "ROLE", 
+			name: "Qiulin JOLLY", 
+			role: "Creative Technologist", 
 			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
 			img: "/profile-q.png" 
 		},
 		{ 
-			name: "NAME", 
-			role: "ROLE", 
+			name: "Chiara DE NIGRIS ", 
+			role: "Creative Technologist", 
 			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
 			img: "/profile-c.png" 
 		},
 		{ 
-			name: "NAME", 
-			role: "ROLE", 
+			name: "Jiaxin ZHANG", 
+			role: "Creative Technologist", 
 			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
 			img: "/profile-j.png" 
 		},
 		{ 
-			name: "NAME", 
-			role: "ROLE", 
+			name: "Henri VALETTE", 
+			role: "Software Developer Engineer", 
 			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
 			img: "/profile-h.png" 
 		},
