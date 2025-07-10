@@ -71,7 +71,6 @@ function FocusPoint({ img, width, height, style, box, target, id, setIsHovering 
         if (id === 2) visibleDuration = 8000;
         if (id === 3) visibleDuration = 8000;
         let timeout: NodeJS.Timeout;
-        let interval: NodeJS.Timeout;
         function startBlinkCycle() {
             setBlink(true);
             timeout = setTimeout(() => {
@@ -82,7 +81,7 @@ function FocusPoint({ img, width, height, style, box, target, id, setIsHovering 
             }, visibleDuration - blinkDuration);
         }
         startBlinkCycle();
-        interval = setInterval(startBlinkCycle, visibleDuration);
+        const interval = setInterval(startBlinkCycle, visibleDuration);
         return () => {
             clearTimeout(timeout);
             clearInterval(interval);
@@ -309,11 +308,6 @@ export default function Home() {
 	// Add state to store placed cursors in the hero section
 	const [placedCursors, setPlacedCursors] = useState<{x: number, y: number, index: number}[]>([]);
 
-	// Line progress states
-	const [lineProgress1, setLineProgress1] = useState(0);
-	const [lineProgress2, setLineProgress2] = useState(0);
-	const [lineProgress3, setLineProgress3] = useState(0);
-
 	// Click on blank space to place a cursor image (only in hero section)
 	const handleHeroBlankClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		if ((e.target as HTMLElement).closest('.focus-point')) return;
@@ -326,55 +320,6 @@ export default function Home() {
 			setCursorIndex(prev => prev % 5 + 1);
 		}
 	};
-
-	useEffect(() => {
-		function handleScroll() {
-			const scrollTop = window.scrollY;
-			const windowH = window.innerHeight;
-
-			// 1. Hero to What We Do (restore original logic)
-			const section3 = document.querySelectorAll('[id^="section-frame"]')[1] || document.getElementById('Section 3');
-			const section3Top = section3 ? (section3 as HTMLElement).getBoundingClientRect().top + window.scrollY : 0;
-			let progress1 = 0;
-			if (section3Top > 0) {
-				progress1 = scrollTop / (section3Top - windowH / 2);
-			} else {
-				const docHeight = document.body.scrollHeight - windowH;
-				progress1 = docHeight > 0 ? scrollTop / (docHeight * 0.4) : 0;
-			}
-			progress1 = Math.min(Math.max(progress1, 0), 1);
-			const fastStartProgress = Math.pow(progress1, 0.7);
-			setLineProgress1(fastStartProgress);
-
-			// 2. What We Do to Section 2 (delayed, slower)
-			const whatWeDo = document.getElementById('what-we-do-section');
-			const section2 = document.getElementById('section-2');
-			const whatWeDoEnd = whatWeDo ? (whatWeDo.getBoundingClientRect().bottom + window.scrollY) : 1200;
-			const section2Top = section2 ? (section2.getBoundingClientRect().top + window.scrollY) : 1800;
-			const triggerStart2 = whatWeDoEnd - windowH * 0.2;
-			const triggerEnd2 = section2Top - windowH * 0.3;
-			let progress2 = 0;
-			if (scrollTop < triggerStart2) progress2 = 0;
-			else if (scrollTop > triggerEnd2) progress2 = 1;
-			else progress2 = (scrollTop - triggerStart2) / (triggerEnd2 - triggerStart2);
-			setLineProgress2(Math.pow(Math.min(Math.max(progress2, 0), 1), 1.2));
-
-			// 3. Section 2 to Section 3 (delayed, independent)
-			const section3Div = document.getElementById('section-3');
-			const section2End = section2 ? (section2.getBoundingClientRect().bottom + window.scrollY) : 2200;
-			const section3Top2 = section3Div ? (section3Div.getBoundingClientRect().top + window.scrollY) : 2600;
-			const triggerStart3 = section2End - windowH * 0.2;
-			const triggerEnd3 = section3Top2 - windowH * 0.3;
-			let progress3 = 0;
-			if (scrollTop < triggerStart3) progress3 = 0;
-			else if (scrollTop > triggerEnd3) progress3 = 1;
-			else progress3 = (scrollTop - triggerStart3) / (triggerEnd3 - triggerStart3);
-			setLineProgress3(Math.pow(Math.min(Math.max(progress3, 0), 1), 1.1));
-		}
-		window.addEventListener("scroll", handleScroll);
-		handleScroll();
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, []);
 
 	useEffect(() => {
 		const updateCursorPosition = (e: MouseEvent) => {
@@ -731,15 +676,16 @@ function DraggableProjects() {
 
 // SectionFrame component for individual section frames
 function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: string, cursorPosition?: { x: number, y: number } }) {
-	// State for reticule cursor (move these to Home component if you want global access)
+	// State for reticule cursor - moved to top level
 	const [valuesHovering, setValuesHovering] = useState(false);
 	const [targetDimensions, setTargetDimensions] = useState({ width: 40, height: 40 });
-
-	// --- Improved cursor position tracking ---
-	const cursorPosRef = useRef({ x: 0, y: 0 });
 	const [cursorPosition, setCursorPosition] = useState(globalCursorPosition || { x: 0, y: 0 });
 	const [blockRect, setBlockRect] = useState<DOMRect | null>(null);
 	const [mouseOffset, setMouseOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+	const [hovered, setHovered] = useState<number|null>(null);
+
+	// Refs
+	const cursorPosRef = useRef({ x: 0, y: 0 });
 	const animationFrame = useRef<number | null>(null);
 
 	useEffect(() => {
@@ -1082,7 +1028,6 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 				img: "/profile-h.png" 
 			},
 		];
-		const [hovered, setHovered] = useState<number|null>(null);
 		
 		// Define consistent total height for each card
 		const TOTAL_CARD_HEIGHT = 280;
