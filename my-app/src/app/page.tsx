@@ -589,10 +589,10 @@ export default function Home() {
 						<div
 							style={{
 								color: '#000',
-								fontSize: 20,
+								fontSize: 14,
 								fontFamily: 'Space Mono, monospace',
 								fontWeight: 400,
-								textTransform: 'uppercase',
+							 textTransform: 'uppercase',
 								letterSpacing: 1,
 								textAlign: 'center',
 								// Add padding to the header to prevent the title from overlapping the border
@@ -992,7 +992,7 @@ function SectionFrame({ title }: { title: string }) {
 							display: 'flex',
 							alignItems: 'center',
 							background: '#CCCCCC',
-							borderBottom: '2px solid #000000',
+							borderBottom: '2px solid #000',
 							position: 'relative',
 						}}
 					>
@@ -1006,7 +1006,7 @@ function SectionFrame({ title }: { title: string }) {
 						<div
 							style={{
 								color: '#000',
-								fontSize: 20,
+								fontSize: 14,
 								fontFamily: 'Space Mono, monospace',
 								fontWeight: 400,
 								textTransform: 'uppercase',
@@ -1081,4 +1081,244 @@ function SectionFrame({ title }: { title: string }) {
 			</>
 		);
 	}
+// Replace the PEOPLE section in your SectionFrame component with this:
+
+if (title === "PEOPLE") {
+	const people = [
+		{
+			name: "NAME",
+			role: "ROLE",
+			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+			img: "/profile-a.png",
+		},
+		{ 
+			name: "NAME", 
+			role: "ROLE", 
+			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+			img: "/profile-q.png" 
+		},
+		{ 
+			name: "NAME", 
+			role: "ROLE", 
+			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+			img: "/profile-c.png" 
+		},
+		{ 
+			name: "NAME", 
+			role: "ROLE", 
+			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+			img: "/profile-j.png" 
+		},
+		{ 
+			name: "NAME", 
+			role: "ROLE", 
+			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+			img: "/profile-h.png" 
+		},
+	];
+	const [hovered, setHovered] = useState<number|null>(null);
+	
+	// Define consistent total height for each card
+	const TOTAL_CARD_HEIGHT = 280;
+	const IMAGE_HEIGHT_DEFAULT = 200; // Taller default image
+	const IMAGE_HEIGHT_HOVER = 130;   // Shorter on hover
+	const INFO_HEIGHT_DEFAULT = TOTAL_CARD_HEIGHT - IMAGE_HEIGHT_DEFAULT; // 80px
+	const INFO_HEIGHT_HOVER = TOTAL_CARD_HEIGHT - IMAGE_HEIGHT_HOVER;     // 150px
+	
+	return (
+		<div
+			style={{
+				width: '86vw',
+				maxWidth: 1327,
+				// Remove fixed height, let it wrap to content
+				minHeight: 'auto', // Changed from height: 380
+				background: '#E0E0E0',
+				border: '2px solid #000',
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				margin: '0 auto',
+				position: 'relative',
+			}}
+		>
+			{/* Header */}
+			<div
+				style={{
+					width: '100%',
+					height: 30,
+					display: 'flex',
+					alignItems: 'center',
+					background: '#CCCCCC',
+					borderBottom: '2px solid #000',
+					position: 'relative',
+				}}
+			>
+				<div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+				</div>
+				<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
+				<div
+					style={{
+						color: '#000',
+						fontSize: 14,
+						fontFamily: 'Space Mono, monospace',
+						fontWeight: 400,
+						textTransform: 'uppercase',
+						letterSpacing: 1,
+						textAlign: 'center',
+						padding: '0 24px',
+						zIndex: 1,
+						border: 'none',
+					}}
+				>
+					{title.toUpperCase()}
+				</div>
+				<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
+				<div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+				</div>
+			</div>
+			{/* People cards container - now wraps to content */}
+			<div style={{ 
+				display: 'flex', 
+				justifyContent: 'stretch', 
+				alignItems: 'flex-start', // Changed from 'end' to 'flex-start' so cards align at top
+				width: '100%', 
+				height: TOTAL_CARD_HEIGHT, // Keep the cards at fixed height
+				paddingTop: 0,
+				paddingBottom: 0,
+			}}>
+				{people.map((p, i) => {
+					const isHover = hovered === i;
+					return (
+						<div
+							key={i}
+							onMouseEnter={() => setHovered(i)}
+							onMouseLeave={() => setHovered(null)}
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								alignItems: 'stretch',
+								flex: 1,
+								height: TOTAL_CARD_HEIGHT, // Fixed total height
+								background: '#fff',
+								borderRadius: 0,
+								position: 'relative',
+								overflow: 'hidden',
+							}}
+						>
+							{/* White info area - now at top */}
+							<div
+								style={{
+									background: '#c6c6c6',
+									display: 'flex',
+									flexDirection: 'column',
+									justifyContent: 'flex-start',
+									alignItems: 'flex-start',
+									padding: '18px 16px 8px 16px',
+									height: isHover ? INFO_HEIGHT_HOVER : INFO_HEIGHT_DEFAULT,
+									transition: 'height 0.3s ease',
+									border: 'none',
+									order: 1, // Ensure text area comes first
+								}}
+							>
+								<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 8, fontFamily: 'Space Mono, monospace', fontSize: 12, fontWeight: 400, color: '#000', marginBottom: 8 }}>
+									<span>{p.name}</span>
+									<span style={{ fontSize: 12, color: '#444', fontWeight: 300 }}>{p.role}</span>
+								</div>
+								{isHover && p.bio && (
+									<div style={{ fontFamily: 'Space Mono, monospace', fontSize: 12, color: '#222', marginTop: 8, lineHeight: 1.4 }}>{p.bio}</div>
+								)}
+							</div>
+							{/* Image area - now at bottom */}
+							<div
+								style={{
+									width: '100%',
+									height: isHover ? IMAGE_HEIGHT_HOVER : IMAGE_HEIGHT_DEFAULT,
+									backgroundImage: p.img ? `url('${p.img}')` : 'repeating-linear-gradient(45deg, #eee 0 16px, #ccc 16px 32px)',
+									backgroundSize: 'cover',
+									backgroundPosition: 'center',
+									transition: 'height 0.3s ease',
+									order: 2, // Ensure image area comes second
+								}}
+							/>
+						</div>
+					);
+				})}
+			</div>
+		</div>
+	);
+}
+
+	// Default content for other sections (like PEOPLE)
+	return (
+		<div
+			style={{
+				width: '86vw',
+				maxWidth: 1327,
+				height: 900,
+				paddingTop: 1,
+				paddingBottom: 1,
+				background: '#E0E0E0',
+				border: '2px solid #000000',
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				margin: '0 auto',
+				position: 'relative',
+			}}
+		>
+			<div
+				style={{
+					width: '100%',
+					height: 30,
+					display: 'flex',
+					alignItems: 'center',
+					background: '#CCCCCC',
+					borderBottom: '2px solid #000000',
+					position: 'relative',
+				}}
+			>
+				<div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+				</div>
+				<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
+				<div
+					style={{
+						color: '#000',
+						fontSize: 20,
+						fontFamily: 'Space Mono, monospace',
+						fontWeight: 400,
+						textTransform: 'uppercase',
+						letterSpacing: 1,
+						textAlign: 'center',
+						padding: '0 24px',
+						zIndex: 1,
+						border: 'none',
+					}}
+				>
+					{title.toUpperCase()}
+				</div>
+				<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
+				<div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+					<div style={{ width: '100%', height: 2, background: '#000' }} />
+				</div>
+			</div>
+			<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, color: '#888', fontFamily: 'Space Mono, monospace' }}>
+				Section: {title}
+			</div>
+		</div>
+	);
 }
