@@ -389,7 +389,7 @@ export default function Home() {
 	const [lineProgress3, setLineProgress3] = useState(0);
 
 	return (
-		<div className="flex flex-col items-center min-h-screen bg-background text-foreground font-mono">
+		<div className="flex flex-col items-center min-h-screen bg-background text-foreground font-mono" style={{ cursor: 'none' }}>
 			{/* Responsive Top Bar */}
 			<div
 				className="w-full flex justify-between items-start mt-6 mb-16 px-1 sm:px-2 lg:px-4"
@@ -644,32 +644,16 @@ export default function Home() {
 				</div>
 				{/* Section 2 */}
 				<div id="section-2">
-					<SectionFrame title="OUR VALUES" />
+					<SectionFrame title="OUR VALUES" cursorPosition={cursorPosition} />
 				</div>
 				<div style={{ width: 2, height: 220, position: 'relative' }}>
 					{/* <SectionConnector fromId="section-2" toId="section-3" lineProgress={lineProgress3} totalLength={totalLength} strokeWidth={2} curve={0} /> */}
 				</div>
 				{/* Section 3 */}
-				<div id="section-3">
+				<div id="section-3" style={{ marginBottom: 360 }}>
 					<SectionFrame title="PEOPLE" />
 				</div>
-				<footer
-					style={{
-						background: "#000",
-						color: "#fff",
-						height: 320,
-						width: "100%",
-						display: "flex",
-						alignItems: "center",
-						justifyContent: "center",
-						fontSize: 24,
-						fontWeight: 500,
-						letterSpacing: 1,
-						marginTop: 380, // Added margin on top of the footer
-					}}
-				>
-					<div>Footer</div>
-				</footer>
+				<Footer />
 			</div>
 		</div>
 	);
@@ -854,20 +838,25 @@ function SectionConnector({
 }
 
 // SectionFrame component for individual section frames
-function SectionFrame({ title }: { title: string }) {
+function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: string, cursorPosition?: { x: number, y: number } }) {
 	// State for reticule cursor (move these to Home component if you want global access)
 	const [valuesHovering, setValuesHovering] = useState(false);
 	const [targetDimensions, setTargetDimensions] = useState({ width: 40, height: 40 });
 
 	// --- Improved cursor position tracking ---
 	const cursorPosRef = useRef({ x: 0, y: 0 });
-	const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+	const [cursorPosition, setCursorPosition] = useState(globalCursorPosition || { x: 0, y: 0 });
 	const [blockRect, setBlockRect] = useState<DOMRect | null>(null);
 	const [mouseOffset, setMouseOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 	const animationFrame = useRef<number | null>(null);
 
 	useEffect(() => {
 		if (title !== "OUR VALUES") return;
+		if (globalCursorPosition) {
+			setCursorPosition(globalCursorPosition);
+			return;
+		}
+		// fallback for local tracking if not provided
 		const handleMouseMove = (e: MouseEvent) => {
 			cursorPosRef.current = { x: e.clientX, y: e.clientY };
 			if (blockRect) {
@@ -888,7 +877,7 @@ function SectionFrame({ title }: { title: string }) {
 			document.removeEventListener('mousemove', handleMouseMove);
 			if (animationFrame.current) cancelAnimationFrame(animationFrame.current);
 		};
-	}, [title, blockRect]);
+	}, [title, blockRect, globalCursorPosition]);
 
 	const handleValueHover = (entering: boolean, element?: HTMLElement) => {
 		setValuesHovering(entering);
@@ -972,19 +961,22 @@ function SectionFrame({ title }: { title: string }) {
 							});
 						})()}
 						{/* Center dot follows mouse within block, always 4x4px */}
-						<div
-							style={{
-								position: 'absolute',
-								width: '4px',
-								height: '4px',
-								background: '#5241FF',
-								borderRadius: '50%',
-								top: mouseOffset.y - 2,
-								left: mouseOffset.x - 2,
-								boxShadow: '0 0 6px #5241FF',
-								opacity: 0.8,
-							}}
-						/>
+						{(typeof mouseOffset.x === 'number' && typeof mouseOffset.y === 'number' && blockRect) && (
+  <div
+    style={{
+      position: 'absolute',
+      width: '4px',
+      height: '4px',
+      background: '#5241FF',
+      borderRadius: '50%',
+      top: Math.max(0, Math.min(mouseOffset.y - 2, blockRect.height - 4)),
+      left: Math.max(0, Math.min(mouseOffset.x - 2, blockRect.width - 4)),
+      boxShadow: '0 0 6px #5241FF',
+      opacity: 0.8,
+      pointerEvents: 'none',
+    }}
+  />
+)}
 					</div>
 				) : (
 					// Default spinning reticule (centered on mouse, circular)
@@ -1110,10 +1102,10 @@ function SectionFrame({ title }: { title: string }) {
 						</div>
 					</div>
 					{/* Five value blocks with hover handlers */}
-					<div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 16, marginTop: 40 }}>
+					<div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 16, marginTop: 40, cursor: valuesHovering ? 'none' : 'auto' }}>
 						{values.map((v, i) => (
-							<div 
-								key={i} 
+							<div
+								key={i}
 								style={{
 									display: 'flex',
 									alignItems: 'center',
@@ -1125,10 +1117,15 @@ function SectionFrame({ title }: { title: string }) {
 									backgroundColor: 'transparent', // made invisible
 									border: 'none', // made invisible
 									transition: 'all 0.3s ease',
+									cursor: valuesHovering ? 'none' : 'pointer',
 								}}
-								onMouseEnter={(e) => handleValueHover(true, e.currentTarget)}
+								onMouseEnter={e => { handleValueHover(true, e.currentTarget); }}
 								onMouseLeave={() => handleValueHover(false)}
-								onMouseOver={(e) => e.stopPropagation()}
+								onMouseMove={e => {
+									const rect = e.currentTarget.getBoundingClientRect();
+									setMouseOffset({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+								}}
+								onMouseOver={e => e.stopPropagation()}
 							>
 								<Image src={v.icon} alt="icon" width={100} height={100} style={{ flexShrink: 0 }} />
 								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -1161,182 +1158,183 @@ function SectionFrame({ title }: { title: string }) {
 			</>
 		);
 	}
-// Replace the PEOPLE section in your SectionFrame component with this:
 
-if (title === "PEOPLE") {
-	const people = [
-		{
-			name: "Abdo HASSAN",
-			role: "Human-Centric AI Manager",
-			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
-			img: "/profile-a.png",
-		},
-		{ 
-			name: "Qiulin JOLLY", 
-			role: "Creative Technologist", 
-			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
-			img: "/profile-q.png" 
-		},
-		{ 
-			name: "Chiara DE NIGRIS ", 
-			role: "Creative Technologist", 
-			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
-			img: "/profile-c.png" 
-		},
-		{ 
-			name: "Jiaxin ZHANG", 
-			role: "Creative Technologist", 
-			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
-			img: "/profile-j.png" 
-		},
-		{ 
-			name: "Henri VALETTE", 
-			role: "Software Developer Engineer", 
-			bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
-			img: "/profile-h.png" 
-		},
-	];
-	const [hovered, setHovered] = useState<number|null>(null);
-	
-	// Define consistent total height for each card
-	const TOTAL_CARD_HEIGHT = 280;
-	const IMAGE_HEIGHT_DEFAULT = 200; // Taller default image
-	const IMAGE_HEIGHT_HOVER = 130;   // Shorter on hover
-	const INFO_HEIGHT_DEFAULT = TOTAL_CARD_HEIGHT - IMAGE_HEIGHT_DEFAULT; // 80px
-	const INFO_HEIGHT_HOVER = TOTAL_CARD_HEIGHT - IMAGE_HEIGHT_HOVER;     // 150px
-	
-	return (
-		<div
-			style={{
-				width: '86vw',
-				maxWidth: 1327,
-				// Remove fixed height, let it wrap to content
-				minHeight: 'auto', // Changed from height: 380
-				background: '#E0E0E0',
-				border: '2px solid #000',
-				display: 'flex',
-				flexDirection: 'column',
-				alignItems: 'center',
-				margin: '80px auto 0 auto',
-				position: 'relative',
-			}}
-		>
-			{/* Header */}
+	// Replace the PEOPLE section in your SectionFrame component with this:
+
+	if (title === "PEOPLE") {
+		const people = [
+			{
+				name: "Abdo HASSAN",
+				role: "Human-Centric AI Manager",
+				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+				img: "/profile-a.png",
+			},
+			{ 
+				name: "Qiulin JOLLY", 
+				role: "Creative Technologist", 
+				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+				img: "/profile-q.png" 
+			},
+			{ 
+				name: "Chiara DE NIGRIS ", 
+				role: "Creative Technologist", 
+				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+				img: "/profile-c.png" 
+			},
+			{ 
+				name: "Jiaxin ZHANG", 
+				role: "Creative Technologist", 
+				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+				img: "/profile-j.png" 
+			},
+			{ 
+				name: "Henri VALETTE", 
+				role: "Software Developer Engineer", 
+				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+				img: "/profile-h.png" 
+			},
+		];
+		const [hovered, setHovered] = useState<number|null>(null);
+		
+		// Define consistent total height for each card
+		const TOTAL_CARD_HEIGHT = 280;
+		const IMAGE_HEIGHT_DEFAULT = 200; // Taller default image
+		const IMAGE_HEIGHT_HOVER = 130;   // Shorter on hover
+		const INFO_HEIGHT_DEFAULT = TOTAL_CARD_HEIGHT - IMAGE_HEIGHT_DEFAULT; // 80px
+		const INFO_HEIGHT_HOVER = TOTAL_CARD_HEIGHT - IMAGE_HEIGHT_HOVER;     // 150px
+		
+		return (
 			<div
 				style={{
-					width: '100%',
-					height: 30,
+					width: '86vw',
+					maxWidth: 1327,
+					// Remove fixed height, let it wrap to content
+					minHeight: 'auto', // Changed from height: 380
+					background: '#E0E0E0',
+					border: '2px solid #000',
 					display: 'flex',
+					flexDirection: 'column',
 					alignItems: 'center',
-					background: '#CCCCCC',
-					borderBottom: '2px solid #000',
+					margin: '80px auto 0 auto',
 					position: 'relative',
 				}}
 			>
-				<div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-				</div>
-				<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
+				{/* Header */}
 				<div
 					style={{
-						color: '#000',
-						fontSize: 14,
-						fontFamily: 'Space Mono, monospace',
-						fontWeight: 400,
-						textTransform: 'uppercase',
-						letterSpacing: 1,
-						textAlign: 'center',
-						// Add padding to the header to prevent the title from overlapping the border
-						padding: '0 24px',
-						// Add zIndex to the header to ensure it sits above the border
-						zIndex: 1,
-						border: 'none',
+						width: '100%',
+						height: 30,
+						display: 'flex',
+						alignItems: 'center',
+						background: '#CCCCCC',
+						borderBottom: '2px solid #000',
+						position: 'relative',
 					}}
 				>
-					{title.toUpperCase()}
+					<div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
+						<div style={{ width: '100%', height: 2, background: '#000' }} />
+						<div style={{ width: '100%', height: 2, background: '#000' }} />
+						<div style={{ width: '100%', height: 2, background: '#000' }} />
+						<div style={{ width: '100%', height: 2, background: '#000' }} />
+					</div>
+					<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
+					<div
+						style={{
+							color: '#000',
+							fontSize: 14,
+							fontFamily: 'Space Mono, monospace',
+							fontWeight: 400,
+							textTransform: 'uppercase',
+							letterSpacing: 1,
+							textAlign: 'center',
+							// Add padding to the header to prevent the title from overlapping the border
+							padding: '0 24px',
+							// Add zIndex to the header to ensure it sits above the border
+							zIndex: 1,
+							border: 'none',
+						}}
+					>
+						{title.toUpperCase()}
+					</div>
+					<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
+					<div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
+						<div style={{ width: '100%', height: 2, background: '#000' }} />
+						<div style={{ width: '100%', height: 2, background: '#000' }} />
+						<div style={{ width: '100%', height: 2, background: '#000' }} />
+						<div style={{ width: '100%', height: 2, background: '#000' }} />
+					</div>
 				</div>
-				<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
-				<div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-				</div>
-			</div>
-			{/* People cards container - now wraps to content */}
-			<div style={{ 
-				display: 'flex', 
-				justifyContent: 'stretch', 
-				alignItems: 'flex-start', // Changed from 'end' to 'flex-start' so cards align at top
-				width: '100%', 
-				height: TOTAL_CARD_HEIGHT, // Keep the cards at fixed height
-				paddingTop: 0,
-				paddingBottom: 0,
-			}}>
-				{people.map((p, i) => {
-					const isHover = hovered === i;
-					return (
-						<div
-							key={i}
-							onMouseEnter={() => setHovered(i)}
-							onMouseLeave={() => setHovered(null)}
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'stretch',
-								flex: 1,
-								height: TOTAL_CARD_HEIGHT, // Fixed total height
-								background: '#fff',
-								borderRadius: 0,
-								position: 'relative',
-								overflow: 'hidden',
-							}}
-						>
-							{/* White info area - now at top */}
+				{/* People cards container - now wraps to content */}
+				<div style={{ 
+					display: 'flex', 
+					justifyContent: 'stretch', 
+					alignItems: 'flex-start', // Changed from 'end' to 'flex-start' so cards align at top
+					width: '100%', 
+					height: TOTAL_CARD_HEIGHT, // Keep the cards at fixed height
+					paddingTop: 0,
+					paddingBottom: 0,
+				}}>
+					{people.map((p, i) => {
+						const isHover = hovered === i;
+						return (
 							<div
+								key={i}
+								onMouseEnter={() => setHovered(i)}
+								onMouseLeave={() => setHovered(null)}
 								style={{
-									background: '#c6c6c6',
 									display: 'flex',
 									flexDirection: 'column',
-									justifyContent: 'flex-start',
-									alignItems: 'flex-start',
-									padding: '18px 16px 8px 16px',
-									height: isHover ? INFO_HEIGHT_HOVER : INFO_HEIGHT_DEFAULT,
-									transition: 'height 0.3s ease',
-									border: 'none',
-									order: 1, // Ensure text area comes first
+									alignItems: 'stretch',
+									flex: 1,
+									height: TOTAL_CARD_HEIGHT, // Fixed total height
+									background: '#fff',
+									borderRadius: 0,
+									position: 'relative',
+									overflow: 'hidden',
 								}}
 							>
-								<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 8, fontFamily: 'Space Mono, monospace', fontSize: 12, fontWeight: 400, color: '#000', marginBottom: 8 }}>
-									<span>{p.name}</span>
-									<span style={{ fontSize: 12, color: '#444', fontWeight: 300 }}>{p.role}</span>
+								{/* White info area - now at top */}
+								<div
+									style={{
+										background: '#c6c6c6',
+										display: 'flex',
+										flexDirection: 'column',
+										justifyContent: 'flex-start',
+										alignItems: 'flex-start',
+										padding: '18px 16px 8px 16px',
+										height: isHover ? INFO_HEIGHT_HOVER : INFO_HEIGHT_DEFAULT,
+										transition: 'height 0.3s ease',
+										border: 'none',
+										order: 1, // Ensure text area comes first
+									}}
+								>
+									<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 8, fontFamily: 'Space Mono, monospace', fontSize: 12, fontWeight: 400, color: '#000', marginBottom: 8 }}>
+										<span>{p.name}</span>
+										<span style={{ fontSize: 12, color: '#444', fontWeight: 300 }}>{p.role}</span>
+									</div>
+									{isHover && p.bio && (
+										<div style={{ fontFamily: 'Space Mono, monospace', fontSize: 12, color: '#222', marginTop: 8, lineHeight: 1.4 }}>{p.bio}</div>
+									)}
 								</div>
-								{isHover && p.bio && (
-									<div style={{ fontFamily: 'Space Mono, monospace', fontSize: 12, color: '#222', marginTop: 8, lineHeight: 1.4 }}>{p.bio}</div>
-								)}
+								{/* Image area - now at bottom */}
+								<div
+									style={{
+										width: '100%',
+										height: isHover ? IMAGE_HEIGHT_HOVER : IMAGE_HEIGHT_DEFAULT,
+										backgroundImage: p.img ? `url('${p.img}')` : 'repeating-linear-gradient(45deg, #eee 0 16px, #ccc 16px 32px)',
+										backgroundSize: 'cover',
+										backgroundPosition: 'center',
+										transition: 'height 0.3s ease',
+										order: 2, // Ensure image area comes second
+									}}
+								/>
 							</div>
-							{/* Image area - now at bottom */}
-							<div
-								style={{
-									width: '100%',
-									height: isHover ? IMAGE_HEIGHT_HOVER : IMAGE_HEIGHT_DEFAULT,
-									backgroundImage: p.img ? `url('${p.img}')` : 'repeating-linear-gradient(45deg, #eee 0 16px, #ccc 16px 32px)',
-									backgroundSize: 'cover',
-									backgroundPosition: 'center',
-									transition: 'height 0.3s ease',
-									order: 2, // Ensure image area comes second
-								}}
-							/>
-						</div>
-					);
-				})}
+						);
+					})}
+				</div>
 			</div>
-		</div>
-	);
-}
+		);
+	}
 
 	// Default content for other sections (like PEOPLE)
 	return (
@@ -1404,3 +1402,93 @@ if (title === "PEOPLE") {
 		</div>
 	);
 }
+
+// Footer component
+function Footer() {
+	return (
+		<footer style={{
+			width: '100%',
+			background: '#000',
+			color: '#fff',
+			padding: 0,
+			position: 'relative',
+			fontFamily: 'Space Mono, monospace',
+		}}>
+			<div style={{
+				display: 'flex',
+				flexDirection: 'row',
+				justifyContent: 'space-between',
+				alignItems: 'stretch',
+				width: '100%',
+				minHeight: 340,
+				padding: '0 32px',
+				boxSizing: 'border-box',
+			}}>
+				{/* Left: List and copyright */}
+				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minWidth: 220 }}>
+					<div style={{ marginTop: 56, display: 'flex', flexDirection: 'column', gap: 16 }}>
+						<a href="#" style={{ color: '#fff', textDecoration: 'none', fontSize: 20, letterSpacing: 1, display: 'flex', alignItems: 'flex-end', gap: 8 }}>
+  RESOURCES
+  <img src="/outward.svg" alt="outward arrow" style={{ width: 20, height: 20, marginLeft: 0, marginBottom: 12, position: 'relative', top: 4, right: 2 }} />
+</a>
+						<a href="#" style={{ color: '#fff', textDecoration: 'underline', fontSize: 20, letterSpacing: 1 }}>HCAI PRINCIPLES</a>
+						<a href="#" style={{ color: '#fff', textDecoration: 'underline', fontSize: 20, letterSpacing: 1 }}>GITHUB</a>
+					</div>
+					<div style={{ marginTop: 32, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+						<div style={{ width: 32, height: 32, borderRadius: '50%', border: '1px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 700, background: 'rgba(255,255,255,0.05)' }}>N</div>
+						<span style={{ fontSize: 16, color: '#fff' }}>COPYRIGHT</span>
+					</div>
+				</div>
+
+				{/* Center: Ellipse Contact Button */}
+				<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 0 }}>
+					<div
+						className="footer-contact-ellipse"
+						style={{
+							width: '60vw',
+						 maxWidth: 1200,
+						 height: '220px',
+						 minWidth: 200,
+						 minHeight: 60,
+						 background: 'transparent',
+						 border: '1px solid #fff',
+						 display: 'flex',
+						 alignItems: 'center',
+						 justifyContent: 'center',
+						 transition: 'background 0.2s',
+						 cursor: 'pointer',
+						 boxSizing: 'border-box',
+						 borderRadius: '50% / 40%',
+						 fontSize: '3vw',
+						 color: '#fff',
+						 position: 'relative',
+						}}
+						onMouseOver={e => e.currentTarget.style.background = '#8F85FF'}
+						onMouseOut={e => e.currentTarget.style.background = 'transparent'}
+					>
+						<span style={{ fontSize: '2.8vw', fontWeight: 400, letterSpacing: 2 }}>CONTACT</span>
+					</div>
+				</div>
+
+				{/* Right: Top and bottom labels */}
+				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-end', minWidth: 220 }}>
+					<div style={{ marginTop: 56, fontSize: 20, letterSpacing: 1 }}>[COE]</div>
+					<div style={{ marginBottom: 32, fontSize: 20, letterSpacing: 1 }}>[HUMAN CENTRIC AI]</div>
+				</div>
+			</div>
+			<style jsx>{`
+				.footer-contact-ellipse {
+					aspect-ratio: 3.5/1;
+				}
+				@media (max-width: 900px) {
+					.footer-contact-ellipse {
+						width: 90vw !important;
+						font-size: 6vw !important;
+					}
+				}
+			`}</style>
+		</footer>
+	);
+}
+
+// Add <Footer /> at the bottom of your main page/app layout
