@@ -249,7 +249,7 @@ function Overlay({ onClose }: { onClose: () => void }) {
             display: "flex",
             flexDirection: "column",
             gap: 7,
-            alignItems: "center", // center content
+            alignItems: "flex-start", // center content
           }}
         >
           <div
@@ -263,7 +263,7 @@ function Overlay({ onClose }: { onClose: () => void }) {
               wordWrap: "break-word",
             }}
           >
-            *hi there!*
+            hi there!
           </div>
           <div
             style={{
