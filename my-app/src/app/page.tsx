@@ -724,10 +724,10 @@ function DraggableProjects() {
 		};
 	});
 	const projects = [
-		"PROJECT NAME 1",
-		"PROJECT NAME 2",
-		"PROJECT NAME 3",
-		"PROJECT NAME 4",
+		"Labeling Platform",
+		"Generative UI PoC",
+		"GenAI Search",
+		"Auto-complete",
 	];
 	// 16:9 ratio, smaller (x0.8), less structured layout
 	const frameW = 607 * 0.8; // ~486
