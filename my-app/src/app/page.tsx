@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, CSSProperties, useLayoutEffect } from "react";
+import { useEffect, useRef, useState, CSSProperties } from "react";
 
 interface FocusBox {
 	title: string;
@@ -235,7 +235,7 @@ function Overlay({ onClose }: { onClose: () => void }) {
             }}
             aria-label="Close overlay"
           >
-            <img src="/close.svg" alt="close" width={16} height={16} />
+            <Image src="/close.svg" alt="close" width={16} height={16} />
           </button>
         </div>
         <div style={{ width: "100%", height: 1, background: "#101010", margin: 0 }} />
@@ -286,7 +286,7 @@ function Overlay({ onClose }: { onClose: () => void }) {
             scroll down the page to explore more about us.
           </div>
           {/* Add logo-dot.svg under the text */}
-          <img src="/logo-dot.svg" alt="logo dot" width={48} height={48} style={{ marginTop: 8 }} />
+          <Image src="/logo-dot.svg" alt="logo dot" width={48} height={48} style={{ marginTop: 8 }} />
         </div>
       </div>
     </div>
@@ -296,20 +296,23 @@ function Overlay({ onClose }: { onClose: () => void }) {
 export default function Home() {
 	// For SVG grow effect
 	const totalLength = 1200; // Approximate path length, adjust as needed
-	const [lineProgress, ] = useState(0);
-	const [, ] = useState(0);
+	const [lineProgress] = useState(0);
 	const lineRef = useRef<SVGPathElement>(null);
 
 	// Cursor logic
 	const [cursorIndex, setCursorIndex] = useState(1); // 1-5 for blank, 0 for hover
 	const [isHovering, setIsHovering] = useState(false);
 
-	// 👈 ADD THE NEW STATES HERE:
-	const [, ] = useState(false);
+	// Cursor position and state
 	const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
 
 	// Add state to store placed cursors in the hero section
 	const [placedCursors, setPlacedCursors] = useState<{x: number, y: number, index: number}[]>([]);
+
+	// Line progress states
+	const [lineProgress1, setLineProgress1] = useState(0);
+	const [lineProgress2, setLineProgress2] = useState(0);
+	const [lineProgress3, setLineProgress3] = useState(0);
 
 	// Click on blank space to place a cursor image (only in hero section)
 	const handleHeroBlankClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -383,10 +386,6 @@ export default function Home() {
 
 	const [showOverlay, setShowOverlay] = useState(true);
 	const [hcHover, setHcHover] = useState(false);
-
-	const [, setLineProgress1] = useState(0);
-	const [, setLineProgress2] = useState(0);
-	const [, setLineProgress3] = useState(0);
 
 	return (
 		<div className="flex flex-col items-center min-h-screen bg-background text-foreground font-mono" style={{ cursor: 'none' }}>
@@ -476,16 +475,16 @@ export default function Home() {
 				>
 					{/* Render placed cursor images */}
 					{placedCursors.map((c, i) => (
-						<img
+						<Image
 							key={i}
 							src={`/cursor-${c.index}.svg`}
 							alt={`cursor-${c.index}`}
+							width={110}
+							height={110}
 							style={{
 								position: 'absolute',
 								left: c.x - 60, // center the larger image (120/2)
 								top: c.y - 60,
-								width: 110,
-								height: 110,
 								pointerEvents: 'none',
 								zIndex: 10,
 							}}
@@ -622,8 +621,6 @@ export default function Home() {
 					</div>
 				</div>
 
-				
-
 				{/* Gap and connector: What we do → Section 2 */}
 				<div style={{ width: '100%', height: 320, position: 'relative' }}>
 				</div>
@@ -731,33 +728,6 @@ function DraggableProjects() {
 		</div>
 	);
 }
-
-// SectionLine component for animated lines between sections
-function SectionLine({ lineProgress, totalLength, path, style, strokeWidth = 2 }: { lineProgress: number; totalLength: number; path: string; style?: React.CSSProperties; strokeWidth?: number }) {
-	const lineRef = useRef<SVGPathElement>(null);
-	return (
-		<svg
-			width="877"
-			height="491" // increased from 391 to 491
-			viewBox="0 0 877 491" // match new height
-			fill="none"
-			style={style}
-		>
-			<path
-				d={path}
-				stroke="#968CFE"
-				strokeWidth={strokeWidth}
-				strokeDasharray={totalLength}
-				strokeDashoffset={totalLength * (1 - lineProgress)}
-				ref={lineRef}
-				style={{
-					transition: "stroke-dashoffset 0.2s linear",
-				}}
-			/>
-		</svg>
-	);
-}
-
 
 // SectionFrame component for individual section frames
 function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: string, cursorPosition?: { x: number, y: number } }) {
@@ -1006,9 +976,7 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 								textTransform: 'uppercase',
 								letterSpacing: 1,
 								textAlign: 'center',
-								// Add padding to the header to prevent the title from overlapping the border
 								padding: '0 24px',
-								// Add zIndex to the header to ensure it sits above the border
 								zIndex: 1,
 								border: 'none',
 							}}
@@ -1036,8 +1004,8 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 									padding: '18px 32px',
 									gap: 32,
 									marginBottom: i === values.length - 1 ? 48 : 0,
-									backgroundColor: 'transparent', // made invisible
-									border: 'none', // made invisible
+									backgroundColor: 'transparent',
+									border: 'none',
 									transition: 'all 0.3s ease',
 									cursor: valuesHovering ? 'none' : 'pointer',
 								}}
@@ -1081,8 +1049,6 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 		);
 	}
 
-	// Replace the PEOPLE section in your SectionFrame component with this:
-
 	if (title === "PEOPLE") {
 		const people = [
 			{
@@ -1120,18 +1086,17 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 		
 		// Define consistent total height for each card
 		const TOTAL_CARD_HEIGHT = 280;
-		const IMAGE_HEIGHT_DEFAULT = 200; // Taller default image
-		const IMAGE_HEIGHT_HOVER = 130;   // Shorter on hover
-		const INFO_HEIGHT_DEFAULT = TOTAL_CARD_HEIGHT - IMAGE_HEIGHT_DEFAULT; // 80px
-		const INFO_HEIGHT_HOVER = TOTAL_CARD_HEIGHT - IMAGE_HEIGHT_HOVER;     // 150px
+		const IMAGE_HEIGHT_DEFAULT = 200;
+		const IMAGE_HEIGHT_HOVER = 130;
+		const INFO_HEIGHT_DEFAULT = TOTAL_CARD_HEIGHT - IMAGE_HEIGHT_DEFAULT;
+		const INFO_HEIGHT_HOVER = TOTAL_CARD_HEIGHT - IMAGE_HEIGHT_HOVER;
 		
 		return (
 			<div
 				style={{
 					width: '86vw',
 					maxWidth: 1327,
-					// Remove fixed height, let it wrap to content
-					minHeight: 'auto', // Changed from height: 380
+					minHeight: 'auto',
 					background: '#E0E0E0',
 					border: '2px solid #000',
 					display: 'flex',
@@ -1169,9 +1134,7 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 							textTransform: 'uppercase',
 							letterSpacing: 1,
 							textAlign: 'center',
-							// Add padding to the header to prevent the title from overlapping the border
 							padding: '0 24px',
-							// Add zIndex to the header to ensure it sits above the border
 							zIndex: 1,
 							border: 'none',
 						}}
@@ -1186,13 +1149,13 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 						<div style={{ width: '100%', height: 2, background: '#000' }} />
 					</div>
 				</div>
-				{/* People cards container - now wraps to content */}
+				{/* People cards container */}
 				<div style={{ 
 					display: 'flex', 
 					justifyContent: 'stretch', 
-					alignItems: 'flex-start', // Changed from 'end' to 'flex-start' so cards align at top
+					alignItems: 'flex-start',
 					width: '100%', 
-					height: TOTAL_CARD_HEIGHT, // Keep the cards at fixed height
+					height: TOTAL_CARD_HEIGHT,
 					paddingTop: 0,
 					paddingBottom: 0,
 				}}>
@@ -1208,7 +1171,7 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 									flexDirection: 'column',
 									alignItems: 'stretch',
 									flex: 1,
-									height: TOTAL_CARD_HEIGHT, // Fixed total height
+									height: TOTAL_CARD_HEIGHT,
 									background: '#fff',
 									borderRadius: 0,
 									position: 'relative',
@@ -1227,7 +1190,7 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 										height: isHover ? INFO_HEIGHT_HOVER : INFO_HEIGHT_DEFAULT,
 										transition: 'height 0.3s ease',
 										border: 'none',
-										order: 1, // Ensure text area comes first
+										order: 1,
 									}}
 								>
 									<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 8, fontFamily: 'Space Mono, monospace', fontSize: 12, fontWeight: 400, color: '#000', marginBottom: 8 }}>
@@ -1247,7 +1210,7 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 										backgroundSize: 'cover',
 										backgroundPosition: 'center',
 										transition: 'height 0.3s ease',
-										order: 2, // Ensure image area comes second
+										order: 2,
 									}}
 								/>
 							</div>
@@ -1258,7 +1221,7 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 		);
 	}
 
-	// Default content for other sections (like PEOPLE)
+	// Default content for other sections
 	return (
 		<div
 			style={{
@@ -1351,7 +1314,7 @@ function Footer() {
 					<div style={{ marginTop: 56, display: 'flex', flexDirection: 'column', gap: 16 }}>
 						<a href="#" style={{ color: '#fff', textDecoration: 'none', fontSize: 20, letterSpacing: 1, display: 'flex', alignItems: 'flex-end', gap: 8 }}>
   RESOURCES
-  <img src="/outward.svg" alt="outward arrow" style={{ width: 20, height: 20, marginLeft: 0, marginBottom: 12, position: 'relative', top: 4, right: 2 }} />
+  <Image src="/outward.svg" alt="outward arrow" width={20} height={20} style={{ marginLeft: 0, marginBottom: 12, position: 'relative', top: 4, right: 2 }} />
 </a>
 						<a href="https://www.figma.com/board/pRFcMj9WYdwWzVvhmRVaHL/Human-centred-AI-Design-Principles?node-id=0-1&t=NlFUxyAmYp8PzWbT-1" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', fontSize: 20, letterSpacing: 0 }}>HCAI PRINCIPLES</a>
 						<a href="https://github.com/dktunited" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', fontSize: 20, letterSpacing: 0 }}>GITHUB</a>
@@ -1371,7 +1334,7 @@ function Footer() {
 						style={{
 							width: '50vw',
 							maxWidth: 1200,
-							aspectRatio: '4/1', // Ensures perfect ellipse
+							aspectRatio: '4/1',
 							background: 'transparent',
 							border: '1px solid #fff',
 							display: 'flex',
@@ -1380,7 +1343,7 @@ function Footer() {
 							transition: 'background 0.2s',
 							cursor: 'pointer',
 							boxSizing: 'border-box',
-							borderRadius: '50%', // True ellipse
+							borderRadius: '50%',
 							fontSize: '3vw',
 							color: '#fff',
 							position: 'relative',
@@ -1416,5 +1379,3 @@ function Footer() {
 		</footer>
 	);
 }
-
-// Add <Footer /> at the bottom of your main page/app layout
