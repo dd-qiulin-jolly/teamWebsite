@@ -932,35 +932,45 @@ function SectionFrame({ title }: { title: string }) {
 							borderRadius: '12px',
 						}}
 					>
-						{/* Corner brackets */}
-						{[...Array(8)].map((_, i) => {
-							const cornerLength = Math.min(blockRect.width, blockRect.height) * 0.15;
-							const cornerThickness = 2;
-							return (
-								<div
-									key={i}
-									className="corner"
-									style={{
-										position: 'absolute',
-										background: '#5241FF',
-										boxShadow: '0 0 8px #5241FF',
-										opacity: 0.9,
-										transition: 'none',
-										...(i % 2 === 0 ? {
-											width: cornerThickness + 'px',
-											height: cornerLength + 'px',
-											[i < 4 ? 'top' : 'bottom']: '0px',
-											[i === 0 || i === 4 ? 'left' : 'right']: '0px'
-										} : {
-											width: cornerLength + 'px',
-											height: cornerThickness + 'px',
-											[i < 4 ? 'top' : 'bottom']: '0px',
-											[i === 1 || i === 5 ? 'left' : 'right']: '0px'
-										})
-									}}
-								/>
-							);
-						})}
+						{/* Calculate a single offset for all corners */}
+						{(() => {
+							const maxOffset = 6; // px, subtle
+							const centerX = blockRect.width / 2;
+							const centerY = blockRect.height / 2;
+							const dx = (mouseOffset.x - centerX) / centerX; // -1 to 1
+							const dy = (mouseOffset.y - centerY) / centerY; // -1 to 1
+							const offsetX = dx * maxOffset;
+							const offsetY = dy * maxOffset;
+							return [...Array(8)].map((_, i) => {
+								const cornerLength = Math.min(blockRect.width, blockRect.height) * 0.15;
+								const cornerThickness = 2;
+								return (
+									<div
+										key={i}
+										className="corner"
+										style={{
+											position: 'absolute',
+											background: '#5241FF',
+											boxShadow: '0 0 8px #5241FF',
+											opacity: 0.9,
+											transition: 'none',
+											transform: `translate(${offsetX}px, ${offsetY}px)`,
+											...(i % 2 === 0 ? {
+												width: cornerThickness + 'px',
+												height: cornerLength + 'px',
+												[i < 4 ? 'top' : 'bottom']: '0px',
+												[i === 0 || i === 4 ? 'left' : 'right']: '0px'
+											} : {
+												width: cornerLength + 'px',
+												height: cornerThickness + 'px',
+												[i < 4 ? 'top' : 'bottom']: '0px',
+												[i === 1 || i === 5 ? 'left' : 'right']: '0px'
+											})
+										}}
+									/>
+								);
+							});
+						})()}
 						{/* Center dot follows mouse within block, always 4x4px */}
 						<div
 							style={{
