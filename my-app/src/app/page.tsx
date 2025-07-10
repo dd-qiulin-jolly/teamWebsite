@@ -594,7 +594,7 @@ export default function Home() {
 								fontSize: 14,
 								fontFamily: 'Space Mono, monospace',
 								fontWeight: 400,
-							 textTransform: 'uppercase',
+								textTransform: 'uppercase',
 								letterSpacing: 1,
 								textAlign: 'center',
 								// Add padding to the header to prevent the title from overlapping the border
@@ -862,12 +862,20 @@ function SectionFrame({ title }: { title: string }) {
 	// --- Improved cursor position tracking ---
 	const cursorPosRef = useRef({ x: 0, y: 0 });
 	const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+	const [blockRect, setBlockRect] = useState<DOMRect | null>(null);
+	const [mouseOffset, setMouseOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 	const animationFrame = useRef<number | null>(null);
 
 	useEffect(() => {
 		if (title !== "OUR VALUES") return;
 		const handleMouseMove = (e: MouseEvent) => {
 			cursorPosRef.current = { x: e.clientX, y: e.clientY };
+			if (blockRect) {
+				setMouseOffset({
+					x: e.clientX - blockRect.left,
+					y: e.clientY - blockRect.top,
+				});
+			}
 			if (!animationFrame.current) {
 				animationFrame.current = requestAnimationFrame(() => {
 					setCursorPosition({ ...cursorPosRef.current });
@@ -880,18 +888,19 @@ function SectionFrame({ title }: { title: string }) {
 			document.removeEventListener('mousemove', handleMouseMove);
 			if (animationFrame.current) cancelAnimationFrame(animationFrame.current);
 		};
-	}, [title]);
+	}, [title, blockRect]);
 
 	const handleValueHover = (entering: boolean, element?: HTMLElement) => {
 		setValuesHovering(entering);
 		if (entering && element) {
 			const rect = element.getBoundingClientRect();
-			const padding = 20;
+			setBlockRect(rect);
 			setTargetDimensions({
-				width: rect.width + padding * 2,
-				height: rect.height + padding * 2
+				width: rect.width,
+				height: rect.height
 			});
 		} else {
+			setBlockRect(null);
 			setTargetDimensions({ width: 40, height: 40 });
 		}
 	};
@@ -908,67 +917,128 @@ function SectionFrame({ title }: { title: string }) {
 		return (
 			<>
 				{/* Custom Reticule Cursor */}
-				<div
-					className={`reticule ${valuesHovering ? 'targeting' : 'spinning'}`}
-					style={{
-						position: 'fixed',
-						left: cursorPosition.x,
-						top: cursorPosition.y,
-						transform: 'translate(-50%, -50%)',
-						pointerEvents: 'none',
-						zIndex: 9999,
-						width: targetDimensions.width + 'px',
-						height: targetDimensions.height + 'px',
-						transition: valuesHovering ? 'all 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55)' : 'all 0.08s cubic-bezier(0.4, 0, 0.2, 1)',
-						borderRadius: valuesHovering ? '12px' : '50%',
-					}}
-				>
-					{/* Corner brackets */}
-					{[...Array(8)].map((_, i) => {
-						const cornerLength = Math.min(targetDimensions.width, targetDimensions.height) * 0.15;
-						const cornerThickness = 2;
-						return (
-							<div
-								key={i}
-								className="corner"
-								style={{
-									position: 'absolute',
-									background: '#5241FF',
-									boxShadow: '0 0 8px #5241FF',
-									opacity: 0.9,
-									transition: valuesHovering ? 'none' : 'all 0.1s ease',
-									...(i % 2 === 0 ? {
-										width: cornerThickness + 'px',
-										height: cornerLength + 'px',
-										[i < 4 ? 'top' : 'bottom']: '0px',
-										[i === 0 || i === 4 ? 'left' : 'right']: '0px'
-									} : {
-										width: cornerLength + 'px',
-										height: cornerThickness + 'px',
-										[i < 4 ? 'top' : 'bottom']: '0px',
-										[i === 1 || i === 5 ? 'left' : 'right']: '0px'
-									})
-								}}
-							/>
-						);
-					})}
-					{/* Center dot */}
+				{valuesHovering && blockRect ? (
 					<div
+						className="reticule targeting"
 						style={{
-							position: 'absolute',
-							width: '4px',
-							height: '4px',
-							background: '#5241FF',
-							borderRadius: '50%',
-							top: '50%',
-							left: '50%',
-							transform: 'translate(-50%, -50%)',
-							boxShadow: '0 0 6px #5241FF',
-							opacity: 0.8,
+							position: 'fixed',
+							left: blockRect.left,
+							top: blockRect.top,
+							pointerEvents: 'none',
+							zIndex: 9999,
+							width: blockRect.width + 'px',
+							height: blockRect.height + 'px',
+							transition: 'all 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+							borderRadius: '12px',
 						}}
-					/>
-				</div>
-
+					>
+						{/* Corner brackets */}
+						{[...Array(8)].map((_, i) => {
+							const cornerLength = Math.min(blockRect.width, blockRect.height) * 0.15;
+							const cornerThickness = 2;
+							return (
+								<div
+									key={i}
+									className="corner"
+									style={{
+										position: 'absolute',
+										background: '#5241FF',
+										boxShadow: '0 0 8px #5241FF',
+										opacity: 0.9,
+										transition: 'none',
+										...(i % 2 === 0 ? {
+											width: cornerThickness + 'px',
+											height: cornerLength + 'px',
+											[i < 4 ? 'top' : 'bottom']: '0px',
+											[i === 0 || i === 4 ? 'left' : 'right']: '0px'
+										} : {
+											width: cornerLength + 'px',
+											height: cornerThickness + 'px',
+											[i < 4 ? 'top' : 'bottom']: '0px',
+											[i === 1 || i === 5 ? 'left' : 'right']: '0px'
+										})
+									}}
+								/>
+							);
+						})}
+						{/* Center dot follows mouse within block, always 4x4px */}
+						<div
+							style={{
+								position: 'absolute',
+								width: '4px',
+								height: '4px',
+								background: '#5241FF',
+								borderRadius: '50%',
+								top: mouseOffset.y - 2,
+								left: mouseOffset.x - 2,
+								boxShadow: '0 0 6px #5241FF',
+								opacity: 0.8,
+							}}
+						/>
+					</div>
+				) : (
+					// Default spinning reticule (centered on mouse, circular)
+					<div
+						className="reticule spinning"
+						style={{
+							position: 'fixed',
+							left: cursorPosition.x,
+							top: cursorPosition.y,
+							transform: 'translate(-50%, -50%)',
+							pointerEvents: 'none',
+							zIndex: 9999,
+							width: targetDimensions.width + 'px',
+							height: targetDimensions.height + 'px',
+							transition: 'all 0.08s cubic-bezier(0.4, 0, 0.2, 1)',
+							borderRadius: '50%',
+						}}
+					>
+						{/* Corner brackets */}
+						{[...Array(8)].map((_, i) => {
+							const cornerLength = Math.min(targetDimensions.width, targetDimensions.height) * 0.15;
+							const cornerThickness = 2;
+							return (
+								<div
+									key={i}
+									className="corner"
+									style={{
+										position: 'absolute',
+										background: '#5241FF',
+										boxShadow: '0 0 8px #5241FF',
+										opacity: 0.9,
+										transition: 'all 0.1s ease',
+										...(i % 2 === 0 ? {
+											width: cornerThickness + 'px',
+											height: cornerLength + 'px',
+											[i < 4 ? 'top' : 'bottom']: '0px',
+											[i === 0 || i === 4 ? 'left' : 'right']: '0px'
+										} : {
+											width: cornerLength + 'px',
+											height: cornerThickness + 'px',
+											[i < 4 ? 'top' : 'bottom']: '0px',
+											[i === 1 || i === 5 ? 'left' : 'right']: '0px'
+										})
+									}}
+								/>
+							);
+						})}
+						{/* Center dot always in center */}
+						<div
+							style={{
+								position: 'absolute',
+								width: '4px',
+								height: '4px',
+								background: '#5241FF',
+								borderRadius: '50%',
+								top: '50%',
+								left: '50%',
+								transform: 'translate(-50%, -50%)',
+								boxShadow: '0 0 6px #5241FF',
+								opacity: 0.8,
+							}}
+						/>
+					</div>
+				)}
 				<div
 					style={{
 						width: '86vw',
@@ -981,12 +1051,10 @@ function SectionFrame({ title }: { title: string }) {
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
-						margin: '0 auto 0 auto',
+						margin: '0 auto',
 						position: 'relative',
-						cursor: 'none',
 					}}
 				>
-					{/* Header */}
 					<div
 						style={{
 							width: '100%',
@@ -994,7 +1062,7 @@ function SectionFrame({ title }: { title: string }) {
 							display: 'flex',
 							alignItems: 'center',
 							background: '#CCCCCC',
-							borderBottom: '2px solid #000',
+							borderBottom: '2px solid #000000',
 							position: 'relative',
 						}}
 					>
@@ -1171,7 +1239,9 @@ if (title === "PEOPLE") {
 						textTransform: 'uppercase',
 						letterSpacing: 1,
 						textAlign: 'center',
+						// Add padding to the header to prevent the title from overlapping the border
 						padding: '0 24px',
+						// Add zIndex to the header to ensure it sits above the border
 						zIndex: 1,
 						border: 'none',
 					}}
