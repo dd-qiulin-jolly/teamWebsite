@@ -1353,7 +1353,7 @@ function Footer() {
 							e.currentTarget.style.border = '1px solid #fff';
 						}}
 					>
-						<span style={{ fontSize: '2.8vw', fontWeight: 400, letterSpacing: -2 }}> Let's Connect! </span>
+						<span style={{ fontSize: '2.8vw', fontWeight: 400, letterSpacing: -2 }}> Let&apos;s Connect! </span>
 					</a>
 				</div>
 
