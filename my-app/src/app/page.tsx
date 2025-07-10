@@ -43,8 +43,8 @@ const focusData = [
 		},
 		target: "section-2",
 		box: {
-			title: "hidden layer",
-			desc: "so here is the short explanation of what we mean by process",
+			title: "middle layer",
+			desc: "so here is the short explanation of what we mean by middle layer",
 		},
 	},
 	{
@@ -272,20 +272,18 @@ function Overlay({ onClose }: { onClose: () => void }) {
               fontSize: 14,
               fontFamily: "Space Mono, monospace",
               fontWeight: 400,
-              textTransform: "uppercase",
+              textTransform: "none",
               lineHeight: "18px",
               wordWrap: "break-word",
               marginBottom: 12,
             }}
           >
-            welcome to the human-centric ai team!<br />
-            <br />
-            {/* explain the concept of the hero section in one sentence. */}<br />
-            <br />
-            scroll down the page to explore more about us.
+            Welcome to the Human centered AI team. We are hybrid thinkers who blend design and data to create human-centered AI (that actually works). <br/><br/>Just like the transformer architecture, we work in layers — adding clarity, creativity, and structure to turn complex input into smart, human-centered output. Get to know us below.
           </div>
-          {/* Add logo-dot.svg under the text */}
-          <Image src="/logo-dot.svg" alt="logo dot" width={48} height={48} style={{ marginTop: 8 }} />
+          {/* Add logo-dot.svg under the text with motion */}
+          <div className="logo-dot-frame" style={{ marginTop: 8, marginBottom: 8 }}>
+            <Image src="/logo-dot.svg" alt="logo dot" width={32} height={32} className="logo-dot-anim" />
+          </div>
         </div>
       </div>
     </div>
@@ -734,11 +732,11 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 
 	if (title === "OUR VALUES") {
 		const values = [
-			{ icon: "/icon-1.svg", keyword: "Future-proof", statement: "We act with honesty and adhere to the highest standards of moral and ethical values." },
-			{ icon: "/icon-2.svg", keyword: "Responsibility", statement: "We embrace new ideas and drive creative solutions for our clients." },
-			{ icon: "/icon-3.svg", keyword: "Participatory", statement: "We believe teamwork and open communication lead to the best results." },
-			{ icon: "/icon-4.svg", keyword: "Tech x Design", statement: "We value diverse perspectives and foster an inclusive environment." },
-			{ icon: "/icon-5.svg", keyword: "Playful", statement: "We strive for the highest quality in everything we do." },
+			{ icon: "/icon-1.svg", keyword: "Future-proofing", statement: "Future-oriented by design, we build ideas that get today ready for tomorrow." },
+			{ icon: "/icon-2.svg", keyword: "Responsibility", statement: "We turn wild ideas into structured data and make responsable AI systems that actually get you." },
+			{ icon: "/icon-3.svg", keyword: "Participation", statement: "Design is a conversation — we listen, co-create, and keep human in the loop." },
+			{ icon: "/icon-4.svg", keyword: "Tech x Design", statement: "Designers + techies = magic. We blend skills to create simple, useful tools." },
+			{ icon: "/icon-5.svg", keyword: "Playfulness", statement: "We keep curiosity loud and fun alive, whether we’re prototyping or hacking together ideas." },
 		];
 
 		return (
@@ -922,7 +920,9 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 								textTransform: 'uppercase',
 								letterSpacing: 1,
 								textAlign: 'center',
+								// Add padding to the header to prevent the title from overlapping the border
 								padding: '0 24px',
+								// Add zIndex to the header to ensure it sits above the border
 								zIndex: 1,
 								border: 'none',
 							}}
@@ -1000,37 +1000,37 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 			{
 				name: "Abdo HASSAN",
 				role: "Human-Centric AI Manager",
-				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU LIKE TO GET AND SO ON",
 				img: "/profile-a.png",
 			},
 			{ 
 				name: "Qiulin JOLLY", 
 				role: "Creative Technologist", 
-				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU LIKE TO GET AND SO ON",
 				img: "/profile-q.png" 
 			},
 			{ 
 				name: "Chiara DE NIGRIS ", 
 				role: "Creative Technologist", 
-				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU LIKE TO GET AND SO ON",
 				img: "/profile-c.png" 
 			},
 			{ 
 				name: "Jiaxin ZHANG", 
 				role: "Creative Technologist", 
-				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU LIKE TO GET AND SO ON",
 				img: "/profile-j.png" 
 			},
 			{ 
 				name: "Henri VALETTE", 
 				role: "Software Developer Engineer", 
-				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU TO GET AND SO ON",
+				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU LIKE TO GET AND SO ON",
 				img: "/profile-h.png" 
 			},
 		];
 		
 		// Define consistent total height for each card
-		const TOTAL_CARD_HEIGHT = 280;
+		const TOTAL_CARD_HEIGHT = 340;
 		const IMAGE_HEIGHT_DEFAULT = 200;
 		const IMAGE_HEIGHT_HOVER = 130;
 		const INFO_HEIGHT_DEFAULT = TOTAL_CARD_HEIGHT - IMAGE_HEIGHT_DEFAULT;
@@ -1079,7 +1079,9 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 							textTransform: 'uppercase',
 							letterSpacing: 1,
 							textAlign: 'center',
+							// Add padding to the header to prevent the title from overlapping the border
 							padding: '0 24px',
+							// Add zIndex to the header to ensure it sits above the border
 							zIndex: 1,
 							border: 'none',
 						}}
@@ -1131,7 +1133,7 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 										flexDirection: 'column',
 										justifyContent: 'flex-start',
 										alignItems: 'flex-start',
-										padding: '18px 16px 8px 16px',
+										padding: '18px 16px 32px 16px', // increased bottom padding for more space
 										height: isHover ? INFO_HEIGHT_HOVER : INFO_HEIGHT_DEFAULT,
 										transition: 'height 0.3s ease',
 										border: 'none',
@@ -1211,7 +1213,9 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 						textTransform: 'uppercase',
 						letterSpacing: 1,
 						textAlign: 'center',
+						// Add padding to the header to prevent the title from overlapping the border
 						padding: '0 24px',
+						// Add zIndex to the header to ensure it sits above the border
 						zIndex: 1,
 						border: 'none',
 					}}
@@ -1262,10 +1266,10 @@ function Footer() {
   <Image src="/outward.svg" alt="outward arrow" width={20} height={20} style={{ marginLeft: 0, marginBottom: 12, position: 'relative', top: 4, right: 2 }} />
 </a>
 						<a href="https://www.figma.com/board/pRFcMj9WYdwWzVvhmRVaHL/Human-centred-AI-Design-Principles?node-id=0-1&t=NlFUxyAmYp8PzWbT-1" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', fontSize: 20, letterSpacing: 0 }}>HCAI PRINCIPLES</a>
-						<a href="https://github.com/dktunited" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', fontSize: 20, letterSpacing: 0 }}>GITHUB</a>
+						
 					</div>
 					<div style={{ marginTop: 32, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-						<span style={{ fontSize: 16, color: '#fff' }}>&copy; {new Date().getFullYear()} Decathlon. All rights reserved.</span>
+						<span style={{ fontSize: 16, color: '#fff', letterSpacing: -1, textTransform: 'uppercase' }}>&copy; {new Date().getFullYear()} Decathlon. All rights reserved.</span>
 					</div>
 				</div>
 
@@ -1285,7 +1289,7 @@ function Footer() {
 							display: 'flex',
 							alignItems: 'center',
 							justifyContent: 'center',
-							transition: 'background 0.2s',
+							transition: 'background 0.2s, border 0.2s',
 							cursor: 'pointer',
 							boxSizing: 'border-box',
 							borderRadius: '50%',
@@ -1296,17 +1300,23 @@ function Footer() {
 							minHeight: 60,
 							textDecoration: 'none',
 						}}
-						onMouseOver={e => e.currentTarget.style.background = '#8F85FF'}
-						onMouseOut={e => e.currentTarget.style.background = 'transparent'}
+						onMouseOver={e => {
+							e.currentTarget.style.background = '#8F85FF';
+							e.currentTarget.style.border = 'none';
+						}}
+						onMouseOut={e => {
+							e.currentTarget.style.background = 'transparent';
+							e.currentTarget.style.border = '1px solid #fff';
+						}}
 					>
-						<span style={{ fontSize: '2.8vw', fontWeight: 400, letterSpacing: 1 }}>CONTACT</span>
+						<span style={{ fontSize: '2.8vw', fontWeight: 400, letterSpacing: -2 }}> Let's Connect! </span>
 					</a>
 				</div>
 
 				{/* Right: Top and bottom labels */}
 				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-end', minWidth: 220 }}>
-					<div style={{ marginTop: 56, fontSize: 20, letterSpacing: 0 }}>[Human]</div>
-					<div style={{ fontSize: 20, letterSpacing: 0, marginTop: 8 }}>[x AI]</div>
+					<div style={{ marginTop: 56, fontSize: 20, letterSpacing: 0, textTransform: 'uppercase' }}>[Human]</div>
+					<div style={{ fontSize: 20, letterSpacing: 0, marginTop: 8, textTransform: 'uppercase' }}>[x AI]</div>
 					<div style={{ flex: 1 }} />
 				</div>
 			</div>
