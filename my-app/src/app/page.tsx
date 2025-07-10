@@ -303,11 +303,24 @@ export default function Home() {
 	const [cursorIndex, setCursorIndex] = useState(1); // 1-5 for blank, 0 for hover
 	const [isHovering, setIsHovering] = useState(false);
 
-	// Click on blank space to cycle cursor (only in hero section)
+	// 👈 ADD THE NEW STATES HERE:
+	const [valuesHovering, setValuesHovering] = useState(false);
+	const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+	const [targetDimensions, setTargetDimensions] = useState({ width: 40, height: 40 });
+
+	// Add state to store placed cursors in the hero section
+	const [placedCursors, setPlacedCursors] = useState<{x: number, y: number, index: number}[]>([]);
+
+	// Click on blank space to place a cursor image (only in hero section)
 	const handleHeroBlankClick = (e: React.MouseEvent<HTMLDivElement>) => {
 		if ((e.target as HTMLElement).closest('.focus-point')) return;
 		if (!isHovering) {
-			setCursorIndex((prev) => (prev % 5) + 1);
+			const rect = (e.target as HTMLElement).getBoundingClientRect();
+			const x = e.clientX - rect.left;
+			const y = e.clientY - rect.top;
+			setPlacedCursors(prev => [...prev, { x, y, index: cursorIndex }]);
+			// Loop cursorIndex from 1 to 5
+			setCursorIndex(prev => prev % 5 + 1);
 		}
 	};
 
@@ -358,6 +371,14 @@ export default function Home() {
 		window.addEventListener("scroll", handleScroll);
 		handleScroll();
 		return () => window.removeEventListener("scroll", handleScroll);
+	}, []);
+
+	useEffect(() => {
+		const updateCursorPosition = (e: MouseEvent) => {
+			setCursorPosition({ x: e.clientX, y: e.clientY });
+		};
+		document.addEventListener('mousemove', updateCursorPosition);
+		return () => document.removeEventListener('mousemove', updateCursorPosition);
 	}, []);
 
 	const [showOverlay, setShowOverlay] = useState(true);
@@ -451,6 +472,23 @@ export default function Home() {
 						}}
 					onClick={handleHeroBlankClick}
 				>
+					{/* Render placed cursor images */}
+					{placedCursors.map((c, i) => (
+						<img
+							key={i}
+							src={`/cursor-${c.index}.svg`}
+							alt={`cursor-${c.index}`}
+							style={{
+								position: 'absolute',
+								left: c.x - 60, // center the larger image (120/2)
+								top: c.y - 60,
+								width: 110,
+								height: 110,
+								pointerEvents: 'none',
+								zIndex: 10,
+							}}
+						/>
+					))}
 					<div
 						id="hero-section"
 						style={{
@@ -467,6 +505,8 @@ export default function Home() {
 							height={980} // increased from 840
 							style={{ objectFit: "contain", width: 980, height: 940 }} // increased from 840x800
 							priority
+							draggable={false}
+							onContextMenu={e => e.preventDefault()}
 						/>
 						{focusData.map((f) => (
 							<FocusPoint
@@ -562,7 +602,7 @@ export default function Home() {
 								border: 'none',
 							}}
 						>
-							What we do?
+							Projects
 						</div>
 						{/* Vertical divider */}
 						<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
@@ -581,28 +621,35 @@ export default function Home() {
 				</div>
 
 				{/* Animated SVG line */}
-				<SectionLine
+				{/* <SectionLine
 					lineProgress={lineProgress1}
 					totalLength={totalLength}
 					path="M1 0V172.5C1 183.546 9.9543 192.5 21 192.5H350C361 192.5 370 201.454 370 212.5V370.5"
-					style={{ position: 'absolute', left: 190, top: 863, zIndex: 1, pointerEvents: 'none' }}
+					style={{
+						position: 'absolute',
+						left: 800,
+						top: 863,
+						transform: 'translateX(-50%)', // center horizontally in hero section
+						zIndex: 1,
+						pointerEvents: 'none',
+					}}
 					strokeWidth={2}
-				/>
+				/> */}
 
 				{/* Gap and connector: What we do → Section 2 */}
 				<div style={{ width: '100%', height: 320, position: 'relative' }}>
-					<SectionConnector fromId="what-we-do-section" toId="section-2" lineProgress={lineProgress2} totalLength={totalLength} strokeWidth={4} />
+					{/* <SectionConnector fromId="what-we-do-section" toId="section-2" lineProgress={lineProgress2} totalLength={totalLength} strokeWidth={4} /> */}
 				</div>
 				{/* Section 2 */}
 				<div id="section-2">
-					<SectionFrame title="Section 2" />
+					<SectionFrame title="OUR VALUES" />
 				</div>
 				<div style={{ width: 2, height: 220, position: 'relative' }}>
-					<SectionConnector fromId="section-2" toId="section-3" lineProgress={lineProgress3} totalLength={totalLength} strokeWidth={2} curve={0} />
+					{/* <SectionConnector fromId="section-2" toId="section-3" lineProgress={lineProgress3} totalLength={totalLength} strokeWidth={2} curve={0} /> */}
 				</div>
 				{/* Section 3 */}
 				<div id="section-3">
-					<SectionFrame title="Section 3" />
+					<SectionFrame title="PEOPLE" />
 				</div>
 				<footer
 					style={{
@@ -806,78 +853,232 @@ function SectionConnector({
 
 // SectionFrame component for individual section frames
 function SectionFrame({ title }: { title: string }) {
-	return (
-		<div
-			style={{
-				width: '86vw',
-				maxWidth: 1327,
-				height: 790, // 2/3 of 1185
-				paddingTop: 1,
-				paddingBottom: 1,
-				background: '#E0E0E0',
-				border: '2px solid #000000',
-				// Restore bottom border for the frame
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'flex-start',
-				alignItems: 'center',
-				gap: 10,
-				margin: '0 auto',
-				position: 'relative',
-			}}
-		>
-			<div
-				style={{
-					width: '100%',
-					height: 30,
-					display: 'flex',
-					alignItems: 'center',
-					background: '#CCCCCC',
-					// Remove borderTop from header to avoid double border
-					borderTop: 'none',
-					// Add a single border under the gray bar (header)
-					borderBottom: '2px solid #000000',
-					position: 'relative',
-				}}
-			>
-				{/* Left lines fill available space */}
-				<div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-				</div>
-				{/* Vertical divider */}
-				<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
-				{/* Title */}
+	// State for reticule cursor (move these to Home component if you want global access)
+	const [valuesHovering, setValuesHovering] = useState(false);
+	const [targetDimensions, setTargetDimensions] = useState({ width: 40, height: 40 });
+
+	// --- Improved cursor position tracking ---
+	const cursorPosRef = useRef({ x: 0, y: 0 });
+	const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+	const animationFrame = useRef<number | null>(null);
+
+	useEffect(() => {
+		if (title !== "OUR VALUES") return;
+		const handleMouseMove = (e: MouseEvent) => {
+			cursorPosRef.current = { x: e.clientX, y: e.clientY };
+			if (!animationFrame.current) {
+				animationFrame.current = requestAnimationFrame(() => {
+					setCursorPosition({ ...cursorPosRef.current });
+					animationFrame.current = null;
+				});
+			}
+		};
+		document.addEventListener('mousemove', handleMouseMove);
+		return () => {
+			document.removeEventListener('mousemove', handleMouseMove);
+			if (animationFrame.current) cancelAnimationFrame(animationFrame.current);
+		};
+	}, [title]);
+
+	const handleValueHover = (entering: boolean, element?: HTMLElement) => {
+		setValuesHovering(entering);
+		if (entering && element) {
+			const rect = element.getBoundingClientRect();
+			const padding = 20;
+			setTargetDimensions({
+				width: rect.width + padding * 2,
+				height: rect.height + padding * 2
+			});
+		} else {
+			setTargetDimensions({ width: 40, height: 40 });
+		}
+	};
+
+	if (title === "OUR VALUES") {
+		const values = [
+			{ icon: "/icon-1.svg", keyword: "Integrity", statement: "We act with honesty and adhere to the highest standards of moral and ethical values." },
+			{ icon: "/icon-2.svg", keyword: "Innovation", statement: "We embrace new ideas and drive creative solutions for our clients." },
+			{ icon: "/icon-3.svg", keyword: "Collaboration", statement: "We believe teamwork and open communication lead to the best results." },
+			{ icon: "/icon-4.svg", keyword: "Diversity", statement: "We value diverse perspectives and foster an inclusive environment." },
+			{ icon: "/icon-5.svg", keyword: "Excellence", statement: "We strive for the highest quality in everything we do." },
+		];
+
+		return (
+			<>
+				{/* Custom Reticule Cursor */}
 				<div
+					className={`reticule ${valuesHovering ? 'targeting' : 'spinning'}`}
 					style={{
-						color: '#000',
-						fontSize: 20,
-						fontFamily: 'Space Mono, monospace',
-						fontWeight: 'bold',
-						textTransform: 'uppercase',
-						letterSpacing: 1,
-						textAlign: 'center',
-						// Add padding to the header to prevent the title from overlapping the border
-						padding: '0 24px',
-						// Add zIndex to the header to ensure it sits above the border
-						zIndex: 1,
-						border: 'none',
+						position: 'fixed',
+						left: cursorPosition.x,
+						top: cursorPosition.y,
+						transform: 'translate(-50%, -50%)',
+						pointerEvents: 'none',
+						zIndex: 9999,
+						width: targetDimensions.width + 'px',
+						height: targetDimensions.height + 'px',
+						transition: valuesHovering ? 'all 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55)' : 'all 0.08s cubic-bezier(0.4, 0, 0.2, 1)',
+						borderRadius: valuesHovering ? '12px' : '50%',
 					}}
 				>
-					{title}
+					{/* Corner brackets */}
+					{[...Array(8)].map((_, i) => {
+						const cornerLength = Math.min(targetDimensions.width, targetDimensions.height) * 0.15;
+						const cornerThickness = 2;
+						return (
+							<div
+								key={i}
+								className="corner"
+								style={{
+									position: 'absolute',
+									background: '#5241FF',
+									boxShadow: '0 0 8px #5241FF',
+									opacity: 0.9,
+									transition: valuesHovering ? 'none' : 'all 0.1s ease',
+									...(i % 2 === 0 ? {
+										width: cornerThickness + 'px',
+										height: cornerLength + 'px',
+										[i < 4 ? 'top' : 'bottom']: '0px',
+										[i === 0 || i === 4 ? 'left' : 'right']: '0px'
+									} : {
+										width: cornerLength + 'px',
+										height: cornerThickness + 'px',
+										[i < 4 ? 'top' : 'bottom']: '0px',
+										[i === 1 || i === 5 ? 'left' : 'right']: '0px'
+									})
+								}}
+							/>
+						);
+					})}
+					{/* Center dot */}
+					<div
+						style={{
+							position: 'absolute',
+							width: '4px',
+							height: '4px',
+							background: '#5241FF',
+							borderRadius: '50%',
+							top: '50%',
+							left: '50%',
+							transform: 'translate(-50%, -50%)',
+							boxShadow: '0 0 6px #5241FF',
+							opacity: 0.8,
+						}}
+					/>
 				</div>
-				{/* Vertical divider */}
-				<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
-				{/* Right lines fill available space */}
-				<div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
-					<div style={{ width: '100%', height: 2, background: '#000' }} />
+
+				<div
+					style={{
+						width: '86vw',
+						maxWidth: 1327,
+						height: 900,
+						paddingTop: 1,
+						paddingBottom: 1,
+						background: '#E0E0E0',
+						border: '2px solid #000000',
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+						margin: '0 auto',
+						position: 'relative',
+						cursor: 'none',
+					}}
+				>
+					{/* Header */}
+					<div
+						style={{
+							width: '100%',
+							height: 30,
+							display: 'flex',
+							alignItems: 'center',
+							background: '#CCCCCC',
+							borderBottom: '2px solid #000000',
+							position: 'relative',
+						}}
+					>
+						<div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
+							<div style={{ width: '100%', height: 2, background: '#000' }} />
+							<div style={{ width: '100%', height: 2, background: '#000' }} />
+							<div style={{ width: '100%', height: 2, background: '#000' }} />
+							<div style={{ width: '100%', height: 2, background: '#000' }} />
+						</div>
+						<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
+						<div
+							style={{
+								color: '#000',
+								fontSize: 20,
+								fontFamily: 'Space Mono, monospace',
+								fontWeight: 400,
+								textTransform: 'uppercase',
+								letterSpacing: 1,
+								textAlign: 'center',
+								// Add padding to the header to prevent the title from overlapping the border
+								padding: '0 24px',
+								// Add zIndex to the header to ensure it sits above the border
+								zIndex: 1,
+								border: 'none',
+							}}
+						>
+							{title.toUpperCase()}
+						</div>
+						<div style={{ width: 2, height: '70%', background: '#000', margin: '0 8px' }} />
+						<div style={{ flex: 1, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 2 }}>
+							<div style={{ width: '100%', height: 2, background: '#000' }} />
+							<div style={{ width: '100%', height: 2, background: '#000' }} />
+							<div style={{ width: '100%', height: 2, background: '#000' }} />
+							<div style={{ width: '100%', height: 2, background: '#000' }} />
+						</div>
+					</div>
+					{/* Five value blocks with hover handlers */}
+					<div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 16, marginTop: 40 }}>
+						{values.map((v, i) => (
+							<div 
+								key={i} 
+								style={{
+									display: 'flex',
+									alignItems: 'center',
+									width: 520,
+									borderRadius: 12,
+									padding: '18px 32px',
+									gap: 32,
+									marginBottom: i === values.length - 1 ? 48 : 0,
+									backgroundColor: 'transparent', // made invisible
+									border: 'none', // made invisible
+									transition: 'all 0.3s ease',
+								}}
+								onMouseEnter={(e) => handleValueHover(true, e.currentTarget)}
+								onMouseLeave={() => handleValueHover(false)}
+								onMouseOver={(e) => e.stopPropagation()}
+							>
+								<Image src={v.icon} alt="icon" width={100} height={100} style={{ flexShrink: 0 }} />
+								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+									<div style={{ fontSize: 20, fontWeight: 400, color: '#000', marginBottom: 4, textTransform: 'uppercase', fontFamily: 'Space Mono, monospace' }}>{v.keyword}</div>
+									<div style={{ fontSize: 14, color: '#000', maxWidth: 380, fontFamily: 'Space Mono, monospace' }}>{v.statement}</div>
+								</div>
+							</div>
+						))}
+					</div>
 				</div>
-			</div>
-		</div>
-	);
+
+				{/* CSS for spinning animation */}
+				<style jsx>{`
+					.reticule.spinning {
+						animation: spin 4s linear infinite;
+					}
+
+					@keyframes spin {
+						from { transform: translate(-50%, -50%) rotate(0deg); }
+						to { transform: translate(-50%, -50%) rotate(360deg); }
+					}
+
+					.value-block:hover {
+						background-color: rgba(82, 65, 255, 0.1) !important;
+						border-color: #5241FF !important;
+						box-shadow: 0 0 20px rgba(82, 65, 255, 0.3);
+						transform: translateY(-2px);
+					}
+				`}</style>
+			</>
+		);
+	}
 }
