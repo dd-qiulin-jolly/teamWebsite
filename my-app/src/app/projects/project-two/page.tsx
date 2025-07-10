@@ -206,7 +206,7 @@ export default function ProjectOne() {
                 <p className="font-mono text-[14px] text-black">
                   Through literature research and qualitative user studies, we identified tensions between dominant chat interfaces and the actual solutions users need: while users think in tasks, AI responds in conversations. Instead of forcing users to adapt to rigid chat formats, we imagined a system that breaks down user intents and generates appropriate UI components on-the-go.<br/><br/>
 Through creative prototyping, we expanded the possibilities of human-LLM interactions to create interfaces that truly understand user intent, providing a foundation for creating intuitive systems that augment their actions. We built this by integrating our own research backend directly into conversations and using LLM function calling with modular UI components to transform what users want into the perfect interface for their task.<br/><br/>
-Looking for something specific? You'll see a curated list of available products with real-time research insights. Need to compare products? The system creates detailed comparison tables pulling from live data. Our platform transforms from a static chat window into whatever tool users actually need, exactly when they need it.
+Looking for something specific? You&apos;ll see a curated list of available products with real-time research insights. Need to compare products? The system creates detailed comparison tables pulling from live data. Our platform transforms from a static chat window into whatever tool users actually need, exactly when they need it.
                 </p>
               </div>
             </div>
