@@ -1431,54 +1431,58 @@ function Footer() {
   RESOURCES
   <img src="/outward.svg" alt="outward arrow" style={{ width: 20, height: 20, marginLeft: 0, marginBottom: 12, position: 'relative', top: 4, right: 2 }} />
 </a>
-						<a href="#" style={{ color: '#fff', textDecoration: 'underline', fontSize: 20, letterSpacing: 1 }}>HCAI PRINCIPLES</a>
-						<a href="#" style={{ color: '#fff', textDecoration: 'underline', fontSize: 20, letterSpacing: 1 }}>GITHUB</a>
+						<a href="https://www.figma.com/board/pRFcMj9WYdwWzVvhmRVaHL/Human-centred-AI-Design-Principles?node-id=0-1&t=NlFUxyAmYp8PzWbT-1" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', fontSize: 20, letterSpacing: 0 }}>HCAI PRINCIPLES</a>
+						<a href="https://github.com/dktunited" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', fontSize: 20, letterSpacing: 0 }}>GITHUB</a>
 					</div>
 					<div style={{ marginTop: 32, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-						<div style={{ width: 32, height: 32, borderRadius: '50%', border: '1px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 700, background: 'rgba(255,255,255,0.05)' }}>N</div>
-						<span style={{ fontSize: 16, color: '#fff' }}>COPYRIGHT</span>
+						<span style={{ fontSize: 16, color: '#fff' }}>&copy; {new Date().getFullYear()} Decathlon. All rights reserved.</span>
 					</div>
 				</div>
 
 				{/* Center: Ellipse Contact Button */}
 				<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 0 }}>
-					<div
+					<a
+						href="mailto:abdo.hassan@decathlon.com"
+						target="_blank"
+						rel="noopener noreferrer"
 						className="footer-contact-ellipse"
 						style={{
-							width: '60vw',
-						 maxWidth: 1200,
-						 height: '220px',
-						 minWidth: 200,
-						 minHeight: 60,
-						 background: 'transparent',
-						 border: '1px solid #fff',
-						 display: 'flex',
-						 alignItems: 'center',
-						 justifyContent: 'center',
-						 transition: 'background 0.2s',
-						 cursor: 'pointer',
-						 boxSizing: 'border-box',
-						 borderRadius: '50% / 40%',
-						 fontSize: '3vw',
-						 color: '#fff',
-						 position: 'relative',
+							width: '50vw',
+							maxWidth: 1200,
+							aspectRatio: '4/1', // Ensures perfect ellipse
+							background: 'transparent',
+							border: '1px solid #fff',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							transition: 'background 0.2s',
+							cursor: 'pointer',
+							boxSizing: 'border-box',
+							borderRadius: '50%', // True ellipse
+							fontSize: '3vw',
+							color: '#fff',
+							position: 'relative',
+							minWidth: 200,
+							minHeight: 60,
+							textDecoration: 'none',
 						}}
 						onMouseOver={e => e.currentTarget.style.background = '#8F85FF'}
 						onMouseOut={e => e.currentTarget.style.background = 'transparent'}
 					>
-						<span style={{ fontSize: '2.8vw', fontWeight: 400, letterSpacing: 2 }}>CONTACT</span>
-					</div>
+						<span style={{ fontSize: '2.8vw', fontWeight: 400, letterSpacing: 1 }}>CONTACT</span>
+					</a>
 				</div>
 
 				{/* Right: Top and bottom labels */}
-				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'flex-end', minWidth: 220 }}>
-					<div style={{ marginTop: 56, fontSize: 20, letterSpacing: 1 }}>[COE]</div>
-					<div style={{ marginBottom: 32, fontSize: 20, letterSpacing: 1 }}>[HUMAN CENTRIC AI]</div>
+				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-end', minWidth: 220 }}>
+					<div style={{ marginTop: 56, fontSize: 20, letterSpacing: 0 }}>[Human]</div>
+					<div style={{ fontSize: 20, letterSpacing: 0, marginTop: 8 }}>[x AI]</div>
+					<div style={{ flex: 1 }} />
 				</div>
 			</div>
 			<style jsx>{`
 				.footer-contact-ellipse {
-					aspect-ratio: 3.5/1;
+					aspect-ratio: 4/1;
 				}
 				@media (max-width: 900px) {
 					.footer-contact-ellipse {
