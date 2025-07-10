@@ -632,11 +632,11 @@ function DraggableProjects() {
 		};
 	});
 	const projects = [
-		"Labeling Platform",
-		"Generative UI PoC",
-		"GenAI Search",
-		"Auto-complete",
-	];
+  { name: "Labeling Platform", path: "/projects/project-one" },
+  { name: "Generative UI PoC", path: "/projects/project-two" },
+  { name: "GenAI Search", path: "/projects/project-three" },
+  { name: "Auto-complete", path: "/projects/project-four" },
+];
 	// 16:9 ratio, smaller (x0.8), less structured layout
 	const frameW = 607 * 0.8; // ~486
 	const frameH = frameW * 9 / 16; // 16:9 ratio
@@ -648,9 +648,9 @@ function DraggableProjects() {
 	];
 	return (
 		<div style={{ position: "relative", width: 900, height: 400 }}>
-			{projects.map((name, idx) => (
+			{projects.map((project, idx) => (
 				<div
-					key={name}
+					key={project.name}
 					style={{
 						position: "absolute",
 						left: positions[idx]?.x ?? defaultOffsets[idx].x,
@@ -660,11 +660,56 @@ function DraggableProjects() {
 					}}
 					onMouseDown={e => handleMouseDown(idx, e)}
 				>
-					<div style={{width: frameW, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', display: 'inline-flex', fontFamily: 'Space Mono, monospace'}}>
-						<div style={{height: 34 * 0.8, paddingLeft: 12 * 0.8, paddingRight: 12 * 0.8, paddingTop: 6 * 0.8, paddingBottom: 6 * 0.8, background: '#5241FF', justifyContent: 'center', alignItems: 'center', gap: 10, display: 'inline-flex'}}>
-							<div style={{color: 'white', fontSize: 14, fontFamily: 'Space Mono, monospace', fontWeight: '400', textTransform: 'uppercase', lineHeight: '18px', wordWrap: 'break-word'}}>{name}</div>
+					<div
+						style={{
+							width: frameW,
+							flexDirection: 'column',
+							justifyContent: 'flex-start',
+							alignItems: 'flex-start',
+							display: 'inline-flex',
+							fontFamily: 'Space Mono, monospace'
+						}}
+					>
+						<div
+							style={{
+								height: 34 * 0.8,
+								paddingLeft: 12 * 0.8,
+								paddingRight: 12 * 0.8,
+								paddingTop: 6 * 0.8,
+								paddingBottom: 6 * 0.8,
+								background: '#5241FF',
+								justifyContent: 'center',
+								alignItems: 'center',
+								gap: 10,
+								display: 'inline-flex',
+								cursor: 'pointer',
+							}}
+							onClick={e => {
+								e.stopPropagation();
+								window.open(project.path, '_blank');
+							}}
+						>
+							<div
+								style={{
+									color: 'white',
+									fontSize: 14,
+									fontFamily: 'Space Mono, monospace',
+									fontWeight: '400',
+									textTransform: 'uppercase',
+									lineHeight: '18px',
+									wordWrap: 'break-word',
+									display: 'flex',
+									alignItems: 'center',
+									gap: 6,
+								}}
+							>
+								{project.name}
+								<Image src="/outward.svg" alt="outward arrow" width={16} height={16} style={{ marginLeft: 4, marginBottom: 2 }} />
+							</div>
 						</div>
-						<div style={{alignSelf: 'stretch', height: frameH, position: 'relative', border: '1px #5241FF solid'}} />
+						<div style={{ alignSelf: 'stretch', height: frameH, position: 'relative', border: '1px #5241FF solid', overflow: 'hidden', background: '#fff' }}>
+							<Image src="/placeholder.jpg" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+						</div>
 					</div>
 				</div>
 			))}
@@ -1263,7 +1308,6 @@ function Footer() {
 					<div style={{ marginTop: 56, display: 'flex', flexDirection: 'column', gap: 16 }}>
 						<a href="#" style={{ color: '#fff', textDecoration: 'none', fontSize: 20, letterSpacing: 1, display: 'flex', alignItems: 'flex-end', gap: 8 }}>
   RESOURCES
-  <Image src="/outward.svg" alt="outward arrow" width={20} height={20} style={{ marginLeft: 0, marginBottom: 12, position: 'relative', top: 4, right: 2 }} />
 </a>
 						<a href="https://www.figma.com/board/pRFcMj9WYdwWzVvhmRVaHL/Human-centred-AI-Design-Principles?node-id=0-1&t=NlFUxyAmYp8PzWbT-1" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', fontSize: 20, letterSpacing: 0 }}>HCAI PRINCIPLES</a>
 						
