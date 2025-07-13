@@ -169,21 +169,35 @@ export default function ProjectOne() {
               style={{ maxHeight: '1400px', minHeight: '400px', height: '1400px' }}
             >
               <div className="grid grid-cols-8 gap-2 items-start justify-center">
-                {/* 8-col wide image */}
-                <img src="/placeholder.jpg" alt="Main Example" className="col-span-8 rounded shadow mt-4" />
-                {/* 4-col wide images */}
-                <img src="/placeholder.jpg" alt="Example 2" className="col-span-4 rounded shadow" />
-                <img src="/placeholder.jpg" alt="Example 3" className="col-span-4 rounded shadow" />
-                {/* 8-col wide image */}
-                <img src="/placeholder.jpg" alt="Example 4" className="col-span-8 rounded shadow" />
-                {/* 4-col wide images */}
-                <img src="/placeholder.jpg" alt="Example 5" className="col-span-4 rounded shadow mb-4" />
-                <img src="/placeholder.jpg" alt="Example 6" className="col-span-4 rounded shadow mb-4" />
-                {/* Additional images for a richer gallery */}
-                <img src="/placeholder.jpg" alt="Example 7" className="col-span-8 rounded shadow" />
-                <img src="/placeholder.jpg" alt="Example 8" className="col-span-4 rounded shadow" />
-                <img src="/placeholder.jpg" alt="Example 9" className="col-span-4 rounded shadow" />
-                <img src="/placeholder.jpg" alt="Example 10" className="col-span-8 rounded shadow mb-4" />
+                {/* 8-col wide video */}
+                <video
+                  src="/gen-ui-1.mp4"
+                  className="col-span-8 rounded shadow mt-4"
+                  style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover' }}
+                  controls
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                />
+                {/* 8-col wide image under video, keep natural height/ratio */}
+                <img src="/gen-ui-2.png" alt="Gen UI 2" className="col-span-8 rounded shadow mt-4" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                {/* Two images side by side: left 5 col (gen-ui-3.png, cropped sides), right 3 col (gen-ui-4.png, natural height) */}
+                <div className="col-span-8 grid grid-cols-8 gap-2 mt-4 items-start">
+                  <div className="col-span-5 rounded shadow overflow-hidden" style={{ height: '100%' }}>
+                    <img src="/gen-ui-3.png" alt="Gen UI 3 Left" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
+                  </div>
+                  <img src="/gen-ui-4.png" alt="Gen UI 4 Right" className="col-span-3 rounded shadow" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                </div>
+                {/* 8-col wide image under the two images, respect natural ratio */}
+                <img src="/gen-ui-5.png" alt="Gen UI 5" className="col-span-8 rounded shadow mt-4" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                {/* Two images side by side under gen-ui-5.png: left 5 col, right 3 col, both respect natural ratio */}
+                <div className="col-span-8 grid grid-cols-8 gap-2 mt-4 items-start">
+                  <img src="/gen-ui-6.png" alt="Gen UI 6 Left" className="col-span-5 rounded shadow" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                  <img src="/gen-ui-7.png" alt="Gen UI 7 Right" className="col-span-3 rounded shadow" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                </div>
+                {/* 8-col wide image under the side-by-side images, respect natural ratio */}
+                <img src="/gen-ui-8.png" alt="Gen UI 8" className="col-span-8 rounded shadow mt-4" style={{ width: '100%', height: 'auto', display: 'block' }} />
               </div>
             </div>
           </div>

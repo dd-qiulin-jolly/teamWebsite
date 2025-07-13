@@ -161,29 +161,24 @@ export default function ProjectOne() {
       {/* Content */}
       <section className="flex-1 flex items-center justify-center">
         <div className="grid grid-cols-12 gap-3 w-full items-start mb-24" style={{ margin: 20 }}>
-          {/* Left: Image Placeholder (col-span 1-8) */}
+          {/* Left: Images (col-span 1-8) */}
           <div className="col-span-8 flex items-start justify-center">
             <div
               ref={imageFrameRef}
               className="w-full h-full overflow-y-auto"
               style={{ maxHeight: '1400px', minHeight: '400px', height: '1400px' }}
             >
-              <div className="grid grid-cols-8 gap-2 items-start justify-center">
-                {/* 8-col wide image */}
-                <img src="/placeholder.jpg" alt="Main Example" className="col-span-8 rounded shadow mt-4" />
-                {/* 4-col wide images */}
-                <img src="/placeholder.jpg" alt="Example 2" className="col-span-4 rounded shadow" />
-                <img src="/placeholder.jpg" alt="Example 3" className="col-span-4 rounded shadow" />
-                {/* 8-col wide image */}
-                <img src="/placeholder.jpg" alt="Example 4" className="col-span-8 rounded shadow" />
-                {/* 4-col wide images */}
-                <img src="/placeholder.jpg" alt="Example 5" className="col-span-4 rounded shadow mb-4" />
-                <img src="/placeholder.jpg" alt="Example 6" className="col-span-4 rounded shadow mb-4" />
-                {/* Additional images for a richer gallery */}
-                <img src="/placeholder.jpg" alt="Example 7" className="col-span-8 rounded shadow" />
-                <img src="/placeholder.jpg" alt="Example 8" className="col-span-4 rounded shadow" />
-                <img src="/placeholder.jpg" alt="Example 9" className="col-span-4 rounded shadow" />
-                <img src="/placeholder.jpg" alt="Example 10" className="col-span-8 rounded shadow mb-4" />
+              <div className="grid grid-cols-8 gap-4 items-start justify-center">
+                {/* 7 images, each 8 columns, same size/ratio */}
+                {[1,2,3,4,5,6,7].map(i => (
+                  <img
+                    key={i}
+                    src={`/gen-ai-search-${i}.png`}
+                    alt={`Gen AI Search ${i}`}
+                    className="col-span-8 rounded shadow mb-4"
+                    style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover' }}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -193,7 +188,7 @@ export default function ProjectOne() {
             <div className="grid grid-cols-4 w-full mb-2">
               <div className="col-span-1" />
               <div className="col-span-3">
-                <span className="font-mono uppercase text-[14px] text-[#5241FF] tracking-normal">PGenAI Search Design Principles</span>
+                <span className="font-mono uppercase text-[14px] text-[#5241FF] tracking-normal">GenAI Search Design Principles</span>
               </div>
             </div>
             <h2 className="font-mono uppercase text-[20px] font-normal tracking-tight mt-6">
@@ -229,12 +224,42 @@ export default function ProjectOne() {
                 </p>
               </div>
             </div>
+            <div className="grid grid-cols-4 w-full mt-8 mb-8">
+              <div className="col-span-1 flex items-start">
+                <span className="font-mono uppercase text-[12px] text-black tracking-normal whitespace-pre-line leading-tight">Resource</span>
+              </div>
+              <div className="col-span-3">
+                <p className="font-mono text-[14px] text-black leading-relaxed">
+                  <a
+                    href="https://www.figma.com/board/pRFcMj9WYdwWzVvhmRVaHL/Human-centred-AI-Design-Principles?node-id=0-1&t=jToexmY8awrYb4kg-1"
+                    className="custom-link"
+                    style={{ color: '#000', textDecoration: 'none' }}
+                  >
+                    <span className="custom-link-underline">Figjam board</span> for human centric design principle index
+                  </a>
+                </p>
+              </div>
+            </div>
             
           </div>
         </div>
       </section>
       {/* Footer */}
       <Footer />
+      <style jsx>{`
+  .custom-link {
+    color: #000;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .custom-link-underline {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .custom-link:hover {
+    color: #8F85FF;
+  }
+`}</style>
     </main>
   );
 }

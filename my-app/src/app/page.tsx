@@ -26,7 +26,7 @@ const focusData = [
 		target: "what-we-do-section",
 		box: {
 			title: "output layer", // changed from 'input' to 'output'
-			desc: "so here is the short explanation of what we mean by output", // changed to match title
+			desc: "Impactful outcomes made for humans, powered by AI", // changed to match title
 		},
 	},
 	{
@@ -44,7 +44,7 @@ const focusData = [
 		target: "section-2",
 		box: {
 			title: "middle layer",
-			desc: "so here is the short explanation of what we mean by middle layer",
+			desc: "Values are blended in creative transformation",
 		},
 	},
 	{
@@ -56,7 +56,7 @@ const focusData = [
 		target: "section-3",
 		box: {
 			title: "input layer", // changed from 'output' to 'input'
-			desc: "so here is the short explanation of what we mean by input", // changed to match title
+			desc: "Bold ideas, tech fire, and many angles", // changed to match title
 		},
 	},
 ];
@@ -536,7 +536,7 @@ export default function Home() {
 								fontSize: 14,
 								fontFamily: 'Space Mono, monospace',
 								fontWeight: 400,
-								textTransform: 'uppercase',
+							 textTransform: 'uppercase',
 								letterSpacing: 1,
 								textAlign: 'center',
 								// Add padding to the header to prevent the title from overlapping the border
@@ -708,7 +708,15 @@ function DraggableProjects() {
 							</div>
 						</div>
 						<div style={{ alignSelf: 'stretch', height: frameH, position: 'relative', border: '1px #5241FF solid', overflow: 'hidden', background: '#fff' }}>
-							<Image src="/placeholder.jpg" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+							{project.name === "GenAI Search" ? (
+								<Image src="/gen-ai-search-3.png" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+							) : project.name === "Generative UI PoC" ? (
+								<Image src="/gen-ui-3.png" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+							) : project.name === "Labeling Platform" ? (
+								<Image src="/label-1.png" alt="project preview" fill style={{ objectFit: 'cover', aspectRatio: '16/9', pointerEvents: 'none' }} />
+							) : (
+								<Image src="/placeholder.jpg" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+							)}
 						</div>
 					</div>
 				</div>
