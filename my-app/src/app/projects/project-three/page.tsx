@@ -175,7 +175,7 @@ export default function ProjectOne() {
                     key={i}
                     src={`/gen-ai-search-${i}.png`}
                     alt={`Gen AI Search ${i}`}
-                    className="col-span-8 rounded shadow mb-4"
+                    className="col-span-8 rounded  mb-4"
                     style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover' }}
                   />
                 ))}

@@ -170,26 +170,28 @@ export default function ProjectOne() {
             >
               <div className="grid grid-cols-8 gap-2 items-start justify-center">
                 {/* label-1 and label-2, each 8 col, respect ratio */}
-                <img src="/label-1.png" alt="Label 1" className="col-span-8 rounded shadow mt-4" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                <img src="/label-2.png" alt="Label 2" className="col-span-8 rounded shadow mt-4" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                {/* label-3 (6 col) and label-4 (2 col), side by side, crop label-3 if heights differ */}
-                <div className="col-span-8 grid grid-cols-8 gap-2 mt-4 items-start">
-                  <div className="col-span-6 rounded shadow overflow-hidden" style={{ height: '100%' }}>
+                <img src="/label-1.png" alt="Label 1" className="col-span-8 rounded" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <img src="/label-2.png" alt="Label 2" className="col-span-8 rounded " style={{ width: '100%', height: 'auto', display: 'block' }} />
+                {/* label-3 (6 col) and label-4 (2 col), side by side, crop label-3 if heights differ, gray border */}
+                <div className="col-span-8 grid grid-cols-8 gap-2 items-start">
+                  <div className="col-span-6 rounded overflow-hidden" style={{ height: '100%', border: '1px solid #e5e7eb' }}>
                     <img src="/label-3.png" alt="Label 3" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
                   </div>
-                  <div className="col-span-2 rounded shadow overflow-hidden" style={{ height: '100%' }}>
+                  <div className="col-span-2 rounded overflow-hidden" style={{ height: '100%', border: '1px solid #e5e7eb' }}>
                     <img src="/label-4.png" alt="Label 4" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
                   </div>
                 </div>
-                {/* label-5 (3 col) and label-6 (5 col), side by side, crop label-6 if heights differ */}
-                <div className="col-span-8 grid grid-cols-8 gap-2 mt-4 items-start">
-                  <img src="/label-5.png" alt="Label 5" className="col-span-3 rounded shadow" style={{ width: '100%', height: 'auto', display: 'block' }} />
-                  <div className="col-span-5 rounded shadow overflow-hidden" style={{ height: '100%' }}>
+                {/* label-5 (3 col) and label-6 (5 col), side by side, crop label-6 if heights differ, gray border */}
+                <div className="col-span-8 grid grid-cols-8 gap-2 items-start rounded">
+                  <div className="col-span-3 rounded overflow-hidden" style={{ border: '1px solid #e5e7eb' }}>
+                    <img src="/label-5.png" alt="Label 5" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }} />
+                  </div>
+                  <div className="col-span-5 rounded overflow-hidden" style={{ height: '100%', border: '1px solid #e5e7eb' }}>
                     <img src="/label-6.png" alt="Label 6" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} />
                   </div>
                 </div>
                 {/* label-7 full row */}
-                <img src="/label-7.png" alt="Label 7" className="col-span-8 rounded shadow mt-4" style={{ width: '100%', height: 'auto', display: 'block' }} />
+                <img src="/label-7.png" alt="Label 7" className="col-span-8 rounded " style={{ width: '100%', height: 'auto', display: 'block' }} />
               </div>
             </div>
           </div>
