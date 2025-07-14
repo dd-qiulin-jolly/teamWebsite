@@ -218,9 +218,9 @@ export default function ProjectOne() {
       {/* Content */}
       <section className="flex-1 flex items-center justify-center">
         {isMobile ? (
-          <div style={{ width: '100%', maxWidth: 600, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 32, paddingLeft: 4, paddingRight: 4 }}>
+          <div style={{ width: '100%', maxWidth: 600, height: 'auto', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 32, paddingLeft: 4, paddingRight: 4 }}>
             {/* Image Gallery on top */}
-            <div ref={imageFrameRef} className="w-full h-full overflow-y-auto" style={{ maxHeight: '1400px', minHeight: '400px', height: 'auto' }}>
+            <div ref={imageFrameRef} className="w-full h-full overflow-hidden" style={{ maxHeight: '1400px', minHeight: '400px', height: 'auto' }}>
               <div className="grid grid-cols-8 gap-2 items-start justify-center">
                 {/* label-1 and label-2, each 8 col, respect ratio */}
                 <img src="/label-1.png" alt="Label 1" className="col-span-8 rounded" style={{ width: '100%', height: 'auto', display: 'block' }} />

@@ -220,7 +220,7 @@ export default function ProjectThree() {
         {isMobile ? (
           <div style={{ width: '100%', maxWidth: 600, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 32, paddingLeft: 4, paddingRight: 4 }}>
             {/* Image Gallery on top */}
-            <div ref={imageFrameRef} className="w-full h-full overflow-y-auto" style={{ maxHeight: '1400px', minHeight: '400px', height: 'auto' }}>
+            <div ref={imageFrameRef} className="w-full h-full overflow-hidden" style={{ maxHeight: '1400px', minHeight: '400px', height: 'auto' }}>
               <div className="grid grid-cols-8 gap-4 items-start justify-center">
                 {[1,2,3,4,5,6,7].map(i => (
                   <img
