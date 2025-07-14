@@ -341,6 +341,25 @@ export default function Home() {
 		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
+	// Dynamically adjust focus point positions for mobile
+	const focusPoints = focusData.map(f => {
+		if (isMobile) {
+			if (f.id === 1) {
+				return {
+					...f,
+					style: { ...f.style, top: 280, left: 40 }, // move up for mobile
+				};
+			}
+			if (f.id === 3) {
+				return {
+					...f,
+					style: { ...f.style, top: 80}, // move up and left for mobile
+				};
+			}
+		}
+		return f;
+	});
+
 	useEffect(() => {
   const handleViewportChange = () => {
     const isMobileViewport = window.innerWidth <= 900;
@@ -387,6 +406,16 @@ export default function Home() {
     thumbnailElements.forEach((thumbnail) => {
       (thumbnail as HTMLElement).style.border = 'none';
     });
+  }
+}, [isMobile]);
+
+	useEffect(() => {
+  if (isMobile) {
+    document.body.style.overflowX = 'hidden';
+    document.documentElement.style.overflowX = 'hidden';
+  } else {
+    document.body.style.overflowX = '';
+    document.documentElement.style.overflowX = '';
   }
 }, [isMobile]);
 
@@ -497,22 +526,33 @@ export default function Home() {
 						id="hero-section"
 						style={{
 							position: "relative",
-							width: 980, // increased from 840
-							height: 940, // increased from 800
+							width: isMobile ? 420 : 980,
+							height: isMobile ? 420 : 940,
 							top: -40,
+							margin: isMobile ? '0 auto' : undefined,
+							display: isMobile ? 'flex' : undefined,
+							justifyContent: isMobile ? 'center' : undefined,
+							alignItems: isMobile ? 'center' : undefined,
 						}}
 					>
 						<Image
 							src="/transformer.png"
 							alt="Transformer Hero"
-							width={980} // increased from 840
-							height={980} // increased from 840
-							style={{ objectFit: "contain", width: 980, height: 940 }} // increased from 840x800
+							width={isMobile ? 600 : 980}
+							height={isMobile ? 600 : 940}
+							style={{
+								objectFit: "contain",
+								width: isMobile ? 600 : 980,
+								height: isMobile ? 600 : 940,
+								margin: isMobile ? '0 auto' : undefined,
+								display: isMobile ? 'block' : undefined,
+								transform: isMobile ? 'rotate(-15deg)' : undefined,
+							}}
 							priority
 							draggable={false}
 							onContextMenu={e => e.preventDefault()}
 						/>
-						{focusData.map((f) => (
+						{focusPoints.map((f) => (
 							<FocusPoint
 								key={f.id}
 								{...f}
@@ -1180,7 +1220,7 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition, isMobile = 
 								}}
 								onMouseOver={e => e.stopPropagation()}
 							>
-								<Image src={v.icon} alt="icon" {...(isMobile ? iconStyleMobile : { width: 100, height: 100 })} style={{ flexShrink: 0 }} />
+								<Image src={v.icon} alt="icon" {...(isMobile ? iconStyleMobile : { width: 100, height: 100 })} style={isMobile ? {} : {}} />
 								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
 									<div style={{ fontWeight: 400, color: '#000', textTransform: 'uppercase', fontFamily: 'Space Mono, monospace', ...(isMobile ? keywordStyleMobile : { fontSize: 20, marginBottom: 4 }) }}>{v.keyword}</div>
 									<div style={{ color: '#000', fontFamily: 'Space Mono, monospace', ...(isMobile ? statementStyleMobile : { fontSize: 14, maxWidth: 380 }) }}>{v.statement}</div>
