@@ -479,7 +479,7 @@ export default function Home() {
 						alignSelf: "stretch",
 						textAlign: "right",
 						color: "#8F85FF",
-						fontSize: 20,
+						fontSize: isMobile ? 16 : 20,
 						fontFamily: "Space Mono, monospace",
 						fontWeight: 400,
 						textTransform: "uppercase",
@@ -764,7 +764,7 @@ function DraggableProjects() {
     const mobileScale = 0.6;
     const mobileFrameW = frameW * mobileScale;
     const mobileFrameH = frameH * mobileScale;
-    const outwardIconSize = 26 * mobileScale;
+    const outwardIconSize = 22 * mobileScale;
     return (
       <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 12, marginTop: -24 }}>
         {projects.map((project, idx) => (
@@ -808,7 +808,7 @@ function DraggableProjects() {
                 window.open(project.path, '_blank');
               }}
             >
-              <span style={{ color: 'white', fontSize: 28 * mobileScale, fontFamily: 'Space Mono, monospace', fontWeight: '400', textTransform: 'uppercase', lineHeight: '32px', wordWrap: 'break-word', display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'flex-start' }}>
+              <span style={{ color: 'white', fontSize: 18 * mobileScale, fontFamily: 'Space Mono, monospace', fontWeight: '400', textTransform: 'uppercase', lineHeight: '32px', wordWrap: 'break-word', display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'flex-start' }}>
                 {project.name}
                 <Image src="/outward.svg" alt="outward arrow" width={outwardIconSize} height={outwardIconSize} style={{ marginLeft: 2, marginBottom: 0, marginTop: '-5px' }} />
               </span>
@@ -984,6 +984,7 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition, isMobile = 
 			padding: '10px 12px',
 			gap: 12,
 			marginBottom: 16,
+			justifyContent: 'center', // Center value block contents horizontally
 		};
 		const iconStyleMobile = {
 			width: 86,
