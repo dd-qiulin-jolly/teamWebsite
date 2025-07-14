@@ -434,7 +434,7 @@ export default function Home() {
 					style={{
 						width: 258,
 						color: hcHover ? "#8F85FF" : "#C6C6C6",
-						fontSize: 20,
+						fontSize: isMobile ? 16 : 20,
 						fontFamily: "Space Mono, monospace",
 						fontWeight: 400,
 						textTransform: "uppercase",
@@ -464,7 +464,7 @@ export default function Home() {
 							alignSelf: "stretch",
 							textAlign: "right",
 							color: "#C6C6C6",
-							fontSize: 20,
+							fontSize: isMobile ? 16 : 20,
 							fontFamily: "Space Mono, monospace",
 							fontWeight: 400,
 							textTransform: "uppercase",
@@ -479,7 +479,7 @@ export default function Home() {
 						alignSelf: "stretch",
 						textAlign: "right",
 						color: "#8F85FF",
-						fontSize: 20,
+						fontSize: isMobile ? 16 : 20,
 						fontFamily: "Space Mono, monospace",
 						fontWeight: 400,
 						textTransform: "uppercase",
@@ -674,7 +674,7 @@ export default function Home() {
 				</div>
 				<div style={{ width: 2, height: isMobile ? 110 : 220, position: 'relative' }}></div>
 				{/* Section 3 */}
-				<div id="section-3" style={{ marginBottom: 360 }}>
+				<div id="section-3" style={{ marginBottom: isMobile ? 120 : 360 }}>
 					<SectionFrame title="PEOPLE" isMobile={isMobile} />
 				</div>
 				<Footer />
@@ -1356,72 +1356,77 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition, isMobile = 
 				</div>
 				{/* People cards container */}
 				<div style={{ 
-					display: 'flex', 
-					justifyContent: 'stretch', 
-					alignItems: 'flex-start',
-					width: '100%', 
-					height: TOTAL_CARD_HEIGHT,
-					paddingTop: 0,
-					paddingBottom: 0,
-				}}>
-					{people.map((p, i) => {
-						const isHover = hovered === i;
-						return (
-							<div
-								key={i}
-								onMouseEnter={() => setHovered(i)}
-								onMouseLeave={() => setHovered(null)}
-								style={{
-									display: 'flex',
-									flexDirection: 'column',
-									alignItems: 'stretch',
-									flex: 1,
-									height: TOTAL_CARD_HEIGHT,
-									background: '#fff',
-									borderRadius: 0,
-									position: 'relative',
-									overflow: 'hidden',
-								}}
-							>
-								{/* White info area - now at top */}
-								<div
-									style={{
-										background: '#c6c6c6',
-										display: 'flex',
-										flexDirection: 'column',
-										justifyContent: 'flex-start',
-										alignItems: 'flex-start',
-										padding: '18px 16px 32px 16px', // increased bottom padding for more space
-										height: isHover ? INFO_HEIGHT_HOVER : INFO_HEIGHT_DEFAULT,
-										transition: 'height 0.3s ease',
-										border: 'none',
-										order: 1,
-									}}
-								>
-									<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 8, fontFamily: 'Space Mono, monospace', fontSize: 12, fontWeight: 400, color: '#000', marginBottom: 8 }}>
-										<span>{p.name}</span>
-										<span style={{ fontSize: 12, color: '#444', fontWeight: 300 }}>{p.role}</span>
-									</div>
-									{isHover && p.bio && (
-										<div style={{ fontFamily: 'Space Mono, monospace', fontSize: 12, color: '#222', marginTop: 8, lineHeight: 1.4 }}>{p.bio}</div>
-									)}
-								</div>
-								{/* Image area - now at bottom */}
-								<div
-									style={{
-										width: '100%',
-										height: isHover ? IMAGE_HEIGHT_HOVER : IMAGE_HEIGHT_DEFAULT,
-										backgroundImage: p.img ? `url('${p.img}')` : 'repeating-linear-gradient(45deg, #eee 0 16px, #ccc 16px 32px)',
-										backgroundSize: 'cover',
-										backgroundPosition: 'center',
-										transition: 'height 0.3s ease',
-										order: 2,
-									}}
-								/>
-							</div>
-						);
-					})}
+	display: isMobile ? 'grid' : 'flex', // use grid for mobile
+	gridTemplateColumns: isMobile ? '1fr 1fr' : undefined, // two columns for mobile
+	gap: isMobile ? 0 : 0, // gap between cards for mobile
+	justifyContent: isMobile ? 'center' : 'stretch',
+	alignItems: isMobile ? 'start' : 'flex-start',
+	width: '100%', 
+	height: isMobile ? 'auto' : TOTAL_CARD_HEIGHT,
+	paddingTop: 0,
+	paddingBottom: 0,
+}}>
+	{people.map((p, i) => {
+		const isHover = hovered === i;
+		return (
+			<div
+				key={i}
+				onMouseEnter={() => setHovered(i)}
+				onMouseLeave={() => setHovered(null)}
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					alignItems: 'stretch',
+					flex: isMobile ? 'none' : 1,
+					width: isMobile ? '100%' : undefined,
+					minWidth: isMobile ? '160px' : undefined,
+					height: isMobile ? TOTAL_CARD_HEIGHT : TOTAL_CARD_HEIGHT,
+					background: '#fff',
+					borderRadius: 0,
+					position: 'relative',
+					overflow: 'hidden',
+					marginBottom: isMobile ? 0 : undefined,
+				}}
+			>
+				{/* White info area - now at top */}
+				<div
+					style={{
+						background: '#c6c6c6',
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'flex-start',
+						alignItems: 'flex-start',
+						padding: '18px 16px 32px 16px',
+						height: isMobile ? INFO_HEIGHT_DEFAULT + 90 : (isHover ? INFO_HEIGHT_HOVER : INFO_HEIGHT_DEFAULT), // even taller bio area for mobile
+						transition: 'height 0.3s ease',
+						border: 'none',
+						order: 1,
+					}}
+				>
+					<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', gap: 8, fontFamily: 'Space Mono, monospace', fontSize: 12, fontWeight: 400, color: '#000', marginBottom: 8 }}>
+						<span>{p.name}</span>
+						<span style={{ fontSize: 12, color: '#444', fontWeight: 300 }}>{p.role}</span>
+					</div>
+					{(isMobile || (isHover && p.bio)) && p.bio && (
+						<div style={{ fontFamily: 'Space Mono, monospace', fontSize: 12, color: '#222', marginTop: 8, lineHeight: 1.4 }}>{p.bio}</div>
+					)}
 				</div>
+				{/* Image area - now at bottom */}
+				<div
+					style={{
+						width: '100%',
+						height: isMobile ? IMAGE_HEIGHT_DEFAULT - 40 : (isHover ? IMAGE_HEIGHT_HOVER : IMAGE_HEIGHT_DEFAULT), // reduce image height for mobile
+						backgroundImage: p.img ? `url('${p.img}')` : 'repeating-linear-gradient(45deg, #eee 0 16px, #ccc 16px 32px)',
+						backgroundSize: 'cover',
+						backgroundPosition: 'center',
+						transition: 'height 0.3s ease',
+						order: 2,
+					}}
+				/>
+			</div>
+		);
+	})}
+</div>
 			</div>
 		);
 	}
@@ -1498,6 +1503,7 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition, isMobile = 
 
 // Footer component
 function Footer() {
+	const isMobile = typeof window !== 'undefined' && window.innerWidth <= 900;
 	return (
 		<footer style={{
 			width: '100%',
@@ -1509,74 +1515,120 @@ function Footer() {
 		}}>
 			<div style={{
 				display: 'flex',
-				flexDirection: 'row',
-				justifyContent: 'space-between',
-				alignItems: 'stretch',
+				flexDirection: isMobile ? 'column' : 'row',
+				justifyContent: isMobile ? 'flex-start' : 'space-between',
+				alignItems: isMobile ? 'flex-start' : 'stretch',
 				width: '100%',
 				minHeight: 340,
-				padding: '0 32px',
+				padding: isMobile ? '0 8vw' : '0 32px',
 				boxSizing: 'border-box',
+				gap: isMobile ? 32 : 0,
 			}}>
+				{/* On mobile: Let's Connect button on top, left aligned */}
+				{isMobile && (
+					<div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+		<a
+			href="mailto:abdo.hassan@decathlon.com"
+			target="_blank"
+			rel="noopener noreferrer"
+			className="footer-contact-ellipse"
+			style={{
+				width: '90vw',
+				maxWidth: 600,
+				aspectRatio: '4/1',
+				background: 'transparent',
+				border: '1px solid #fff',
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+				transition: 'background 0.2s, border 0.2s',
+				cursor: 'pointer',
+				boxSizing: 'border-box',
+				borderRadius: '50%',
+				fontSize: '6vw',
+				color: '#fff',
+				position: 'relative',
+				minWidth: 200,
+				minHeight: 60,
+				textDecoration: 'none',
+				marginBottom: 32,
+				marginTop: 60,
+			}}
+			onMouseOver={e => {
+				e.currentTarget.style.background = '#8F85FF';
+				e.currentTarget.style.border = 'none';
+			}}
+			onMouseOut={e => {
+				e.currentTarget.style.background = 'transparent';
+				e.currentTarget.style.border = '1px solid #fff';
+			}}
+		>
+			<span style={{ fontSize: 20, fontWeight: 400, letterSpacing: -2, textAlign: 'center', width: '100%' }}> Let&apos;s Connect! </span>
+		</a>
+	</div>
+				)}
 				{/* Left: List and copyright */}
 				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minWidth: 220 }}>
-					<div style={{ marginTop: 56, display: 'flex', flexDirection: 'column', gap: 16 }}>
-						<a href="#" style={{ color: '#fff', textDecoration: 'none', fontSize: 20, letterSpacing: 1, display: 'flex', alignItems: 'flex-end', gap: 8 }}>
+					<div style={{ marginTop: isMobile ? 0 : 56, display: 'flex', flexDirection: 'column', gap: 16 }}>
+						<a href="#" style={{ color: '#fff', textDecoration: 'none', fontSize: isMobile ? 16 : 20, letterSpacing: 1, display: 'flex', alignItems: 'flex-end', gap: 8 }}>
   RESOURCES
 </a>
-						<a href="https://www.figma.com/board/pRFcMj9WYdwWzVvhmRVaHL/Human-centred-AI-Design-Principles?node-id=0-1&t=NlFUxyAmYp8PzWbT-1" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', fontSize: 20, letterSpacing: 0 }}>HCAI PRINCIPLES</a>
-						
+						<a href="https://www.figma.com/board/pRFcMj9WYdwWzVvhmRVaHL/Human-centred-AI-Design-Principles?node-id=0-1&t=NlFUxyAmYp8PzWbT-1" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', textDecoration: 'underline', fontSize: isMobile ? 16 : 20, letterSpacing: 0 }}>HCAI PRINCIPLES</a>
+
 					</div>
-					<div style={{ marginTop: 32, marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-						<span style={{ fontSize: 16, color: '#fff', letterSpacing: -1, textTransform: 'uppercase' }}>&copy; {new Date().getFullYear()} Decathlon. All rights reserved.</span>
+					<div style={{ marginTop: 64, marginBottom: 18, display: 'flex', alignItems: 'center', gap: 8 }}>
+						<span style={{ fontSize: isMobile ? 14 : 20, color: '#fff', letterSpacing: -1, }}>&copy; {new Date().getFullYear()} Decathlon. All rights reserved.</span>
 					</div>
 				</div>
-
-				{/* Center: Ellipse Contact Button */}
-				<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 0 }}>
-					<a
-						href="mailto:abdo.hassan@decathlon.com"
-						target="_blank"
-						rel="noopener noreferrer"
-						className="footer-contact-ellipse"
-						style={{
-							width: '50vw',
-							maxWidth: 1200,
-							aspectRatio: '4/1',
-							background: 'transparent',
-							border: '1px solid #fff',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-							transition: 'background 0.2s, border 0.2s',
-							cursor: 'pointer',
-							boxSizing: 'border-box',
-							borderRadius: '50%',
-							fontSize: '3vw',
-							color: '#fff',
-							position: 'relative',
-							minWidth: 200,
-							minHeight: 60,
-							textDecoration: 'none',
-						}}
-						onMouseOver={e => {
-							e.currentTarget.style.background = '#8F85FF';
-							e.currentTarget.style.border = 'none';
-						}}
-						onMouseOut={e => {
-							e.currentTarget.style.background = 'transparent';
-							e.currentTarget.style.border = '1px solid #fff';
-						}}
-					>
-						<span style={{ fontSize: '2.8vw', fontWeight: 400, letterSpacing: -2 }}> Let&apos;s Connect! </span>
-					</a>
-				</div>
-
+				{/* Center: Ellipse Contact Button for desktop only */}
+				{!isMobile && (
+					<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 0 }}>
+						<a
+							href="mailto:abdo.hassan@decathlon.com"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="footer-contact-ellipse"
+							style={{
+								width: '50vw',
+								maxWidth: 1200,
+								aspectRatio: '4/1',
+								background: 'transparent',
+								border: '1px solid #fff',
+								display: 'flex',
+								alignItems: 'center',
+								justifyContent: 'center',
+								transition: 'background 0.2s, border 0.2s',
+								cursor: 'pointer',
+								boxSizing: 'border-box',
+								borderRadius: '50%',
+								fontSize: '3vw',
+								color: '#fff',
+								position: 'relative',
+								minWidth: 200,
+								minHeight: 60,
+								textDecoration: 'none',
+							}}
+							onMouseOver={e => {
+								e.currentTarget.style.background = '#8F85FF';
+								e.currentTarget.style.border = 'none';
+							}}
+							onMouseOut={e => {
+								e.currentTarget.style.background = 'transparent';
+								e.currentTarget.style.border = '1px solid #fff';
+							}}
+						>
+							<span style={{ fontSize: '2.8vw', fontWeight: 400, letterSpacing: -2 }}> Let&apos;s Connect! </span>
+						</a>
+					</div>
+				)}
 				{/* Right: Top and bottom labels */}
-				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-end', minWidth: 220 }}>
-					<div style={{ marginTop: 56, fontSize: 20, letterSpacing: 0, textTransform: 'uppercase' }}>[Human]</div>
-					<div style={{ fontSize: 20, letterSpacing: 0, marginTop: 8, textTransform: 'uppercase' }}>[x AI]</div>
-					<div style={{ flex: 1 }} />
-				</div>
+				{!isMobile && (
+					<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-end', minWidth: 220 }}>
+						<div style={{ marginTop: 48, fontSize: 20, letterSpacing: 0, textTransform: 'uppercase' }}>[Human]</div>
+						<div style={{ fontSize: 20, letterSpacing: 0, marginTop: 12, textTransform: 'uppercase' }}>[x AI]</div>
+						<div style={{ flex: 1 }} />
+					</div>
+				)}
 			</div>
 			<style jsx>{`
 				.footer-contact-ellipse {
