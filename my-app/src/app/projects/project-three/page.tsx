@@ -264,7 +264,7 @@ export default function ProjectThree() {
                 </div>
               </div>
               <h2 className="font-mono uppercase text-[20px] font-normal tracking-tight mt-6">
-                What if we could reimagine the search bar in traditional e-commerce as a dynamic, responsive, and hyper-tailored experience? / How will GenAI change the way people use Decathlon website?
+                How can we reimagine the search bar in e-commerce as a human-centric, dynamic, and hyper-tailored experience?
               </h2>
               {/* Paragraph row using grid for alignment */}
               <div className="grid grid-cols-4 w-full mt-12 mb-6">
@@ -346,7 +346,7 @@ export default function ProjectThree() {
                 </div>
               </div>
               <h2 className="font-mono uppercase text-[20px] font-normal tracking-tight mt-6">
-                What if we could reimagine the search bar in traditional e-commerce as a dynamic, responsive, and hyper-tailored experience? / How will GenAI change the way people use Decathlon website?
+                How can we reimagine the search bar in e-commerce as a human-centric, dynamic, and hyper-tailored experience?
               </h2>
               {/* Paragraph row using grid for alignment */}
               <div className="grid grid-cols-4 w-full mt-12 mb-6">

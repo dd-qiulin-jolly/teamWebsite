@@ -243,21 +243,9 @@ export default function ProjectFour() {
             {/* Image Gallery on top */}
             <div ref={imageFrameRef} className="w-full h-full overflow-hidden" style={{ minHeight: '400px', height: 'auto' }}>
               <div className="grid grid-cols-8 gap-2 items-start justify-center">
-                {/* 8-col wide image */}
-                <img src="/placeholder.jpg" alt="Main Example" className="col-span-8 rounded shadow mt-4" />
-                {/* 4-col wide images */}
-                <img src="/placeholder.jpg" alt="Example 2" className="col-span-4 rounded shadow" />
-                <img src="/placeholder.jpg" alt="Example 3" className="col-span-4 rounded shadow" />
-                {/* 8-col wide image */}
-                <img src="/placeholder.jpg" alt="Example 4" className="col-span-8 rounded shadow" />
-                {/* 4-col wide images */}
-                <img src="/placeholder.jpg" alt="Example 5" className="col-span-4 rounded shadow mb-4" />
-                <img src="/placeholder.jpg" alt="Example 6" className="col-span-4 rounded shadow mb-4" />
-                {/* Additional images for a richer gallery */}
-                <img src="/placeholder.jpg" alt="Example 7" className="col-span-8 rounded shadow" />
-                <img src="/placeholder.jpg" alt="Example 8" className="col-span-4 rounded shadow" />
-                <img src="/placeholder.jpg" alt="Example 9" className="col-span-4 rounded shadow" />
-                <img src="/placeholder.jpg" alt="Example 10" className="col-span-8 rounded shadow mb-4" />
+                {/* First: as-2.mov video */}
+                <video src="/as-2.mov" controls className="col-span-8 rounded shadow mt-4" />
+                {/* Remove all placeholder images */}
               </div>
             </div>
             {/* Text content below gallery */}
@@ -266,18 +254,19 @@ export default function ProjectFour() {
               <div className="grid grid-cols-4 w-full mb-2">
                 <div className="col-span-1" />
                 <div className="col-span-3">
-                  <span className="font-mono uppercase text-[14px] text-[#5241FF] tracking-normal">Autocomplete</span>
+                  <span className="font-mono uppercase text-[14px] text-[#5241FF] tracking-normal">Dynamic Autosuggest</span>
                 </div>
               </div>
               <h2 className="font-mono uppercase text-[20px] font-normal tracking-tight mt-6">
-                Placeholder
+                How can we build a performant yet intent-sensitive autosuggest for e-com search?
               </h2>
               {/* Paragraph row using grid for alignment */}
               <div className="grid grid-cols-4 w-full mt-12 mb-6">
                 <div className="col-span-1" />
                 <div className="col-span-3">
                   <p className="font-mono text-[14px] text-black">
-                    content 
+                    Our initial research showed that customers' search behaviours come with a variety of intention, this ranges from specific to general, and from mission critical to exploratory. The task of the autocomplete here is two fold, first to expand the search space for the user by finding relevant yet unexplored candidates. Second, is to provide the user with high performing queries, increasing their chance of finding the right product.
+The autosuggest leverages a hybrid approach so that it can remain precise, fast, relevant but still serendipitous. 
                   </p>
                 </div>
               </div>
@@ -288,7 +277,7 @@ export default function ProjectFour() {
                 </div>
                 <div className="col-span-3">
                   <p className="font-mono text-[14px] text-black leading-relaxed">
-                    content
+                    Dynamic autosuggest endpoint as part of the Ecom/AB test.
                   </p>
                 </div>
               </div>
@@ -298,7 +287,7 @@ export default function ProjectFour() {
                 </div>
                 <div className="col-span-3">
                   <p className="font-mono text-[14px] text-black leading-relaxed">
-                    content
+                    Dynamic ranking, hybrid methodology, misspelling robustness, basic semantic understanding for categories.
                   </p>
                 </div>
               </div>
@@ -308,7 +297,7 @@ export default function ProjectFour() {
                 </div>
                 <div className="col-span-3">
                   <p className="font-mono text-[14px] text-black leading-relaxed">
-                    content
+                    Python: Fuzzy Matching, fast embeddings, prefix tries.
                   </p>
                 </div>
               </div>
@@ -324,21 +313,9 @@ export default function ProjectFour() {
                 style={{ maxHeight: '1400px', minHeight: '400px', height: '1400px' }}
               >
                 <div className="grid grid-cols-8 gap-2 items-start justify-center">
-                  {/* 8-col wide image */}
-                  <img src="/placeholder.jpg" alt="Main Example" className="col-span-8 rounded shadow mt-4" />
-                  {/* 4-col wide images */}
-                  <img src="/placeholder.jpg" alt="Example 2" className="col-span-4 rounded shadow" />
-                  <img src="/placeholder.jpg" alt="Example 3" className="col-span-4 rounded shadow" />
-                  {/* 8-col wide image */}
-                  <img src="/placeholder.jpg" alt="Example 4" className="col-span-8 rounded shadow" />
-                  {/* 4-col wide images */}
-                  <img src="/placeholder.jpg" alt="Example 5" className="col-span-4 rounded shadow mb-4" />
-                  <img src="/placeholder.jpg" alt="Example 6" className="col-span-4 rounded shadow mb-4" />
-                  {/* Additional images for a richer gallery */}
-                  <img src="/placeholder.jpg" alt="Example 7" className="col-span-8 rounded shadow" />
-                  <img src="/placeholder.jpg" alt="Example 8" className="col-span-4 rounded shadow" />
-                  <img src="/placeholder.jpg" alt="Example 9" className="col-span-4 rounded shadow" />
-                  <img src="/placeholder.jpg" alt="Example 10" className="col-span-8 rounded shadow mb-4" />
+                  {/* First: as-2.mov video */}
+                  <video src="/as-2.mov" controls className="col-span-8 rounded shadow mt-4" />
+                  {/* Remove all placeholder images */}
                 </div>
               </div>
             </div>
@@ -348,17 +325,18 @@ export default function ProjectFour() {
               <div className="grid grid-cols-4 w-full mb-2">
                 <div className="col-span-1" />
                 <div className="col-span-3">
-                  <span className="font-mono uppercase text-[14px] text-[#5241FF] tracking-normal">Autocomplete</span>
+                  <span className="font-mono uppercase text-[14px] text-[#5241FF] tracking-normal">Dynamic Autosuggest</span>
                 </div>
               </div>
               <h2 className="font-mono uppercase text-[20px] font-normal tracking-tight mt-6">
-                Placeholder
+                How can we build a performant yet intent-sensitive autosuggest for e-com search?
               </h2>
               <div className="grid grid-cols-4 w-full mt-12 mb-6">
                 <div className="col-span-1" />
                 <div className="col-span-3">
                   <p className="font-mono text-[14px] text-black">
-                    content 
+                    Our initial research showed that customers' search behaviours come with a variety of intention, this ranges from specific to general, and from mission critical to exploratory. The task of the autocomplete here is two fold, first to expand the search space for the user by finding relevant yet unexplored candidates. Second, is to provide the user with high performing queries, increasing their chance of finding the right product.
+The autosuggest leverages a hybrid approach so that it can remain precise, fast, relevant but still serendipitous. 
                   </p>
                 </div>
               </div>
@@ -368,7 +346,7 @@ export default function ProjectFour() {
                 </div>
                 <div className="col-span-3">
                   <p className="font-mono text-[14px] text-black leading-relaxed">
-                    content
+                    Dynamic autosuggest endpoint as part of the Ecom/AB test.
                   </p>
                 </div>
               </div>
@@ -378,7 +356,7 @@ export default function ProjectFour() {
                 </div>
                 <div className="col-span-3">
                   <p className="font-mono text-[14px] text-black leading-relaxed">
-                    content
+                    Dynamic ranking, hybrid methodology, misspelling robustness, basic semantic understanding for categories.
                   </p>
                 </div>
               </div>
@@ -388,7 +366,7 @@ export default function ProjectFour() {
                 </div>
                 <div className="col-span-3">
                   <p className="font-mono text-[14px] text-black leading-relaxed">
-                    content
+                    Python: Fuzzy Matching, fast embeddings, prefix tries.
                   </p>
                 </div>
               </div>

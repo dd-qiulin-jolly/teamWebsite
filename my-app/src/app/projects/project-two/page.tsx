@@ -288,7 +288,7 @@ export default function ProjectTwo() {
                 </div>
               </div>
               <h2 className="font-mono uppercase text-[20px] font-normal tracking-tight mt-6">
-                Instantly-adaptive generative UI: how can we take users where they really want to be? / What if AI could craft the perfect interface that reads human intent?
+                How can we create an instantly adaptive UI that reads human intent?
               </h2>
               {/* Paragraph row using grid for alignment */}
               <div className="grid grid-cols-4 w-full mt-12 mb-6">
@@ -390,7 +390,7 @@ Looking for something specific? You&apos;ll see a curated list of available prod
                 </div>
               </div>
               <h2 className="font-mono uppercase text-[20px] font-normal tracking-tight mt-6">
-                Instantly-adaptive generative UI: how can we take users where they really want to be? / What if AI could craft the perfect interface that reads human intent?
+                How can we create an instantly adaptive UI that reads human intent?
               </h2>
               <div className="grid grid-cols-4 w-full mt-12 mb-6">
                 <div className="col-span-1" />

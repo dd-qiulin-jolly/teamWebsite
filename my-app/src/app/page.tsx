@@ -690,7 +690,7 @@ function DraggableProjects() {
     { name: "Labeling Platform", path: "/projects/project-one" },
     { name: "Generative UI PoC", path: "/projects/project-two" },
     { name: "GenAI Search", path: "/projects/project-three" },
-    { name: "Auto-complete", path: "/projects/project-four" },
+    { name: "Dynamic Autosuggest", path: "/projects/project-four" },
   ];
   const frameW = 607 * 0.8; // ~486
   const frameH = frameW * 9 / 16; // 16:9 ratio
@@ -821,7 +821,7 @@ function DraggableProjects() {
               ) : project.name === "Labeling Platform" ? (
                 <Image src="/label-1.png" alt="project preview" fill style={{ objectFit: 'cover', aspectRatio: '16/9', pointerEvents: 'none' }} />
               ) : (
-                <Image src="/placeholder.jpg" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+                <Image src="/as-1.png" alt="project preview" fill style={{ objectFit: 'cover', aspectRatio: '16/9', pointerEvents: 'none' }} />
               )}
             </div>
           </div>
@@ -900,7 +900,7 @@ function DraggableProjects() {
               ) : project.name === "Labeling Platform" ? (
                 <Image src="/label-1.png" alt="project preview" fill style={{ objectFit: 'cover', aspectRatio: '16/9', pointerEvents: 'none' }} />
               ) : (
-                <Image src="/placeholder.jpg" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+                <Image src="/as-1.png" alt="project preview" fill style={{ objectFit: 'cover', aspectRatio: '16/9', pointerEvents: 'none' }} />
               )}
             </div>
           </div>
