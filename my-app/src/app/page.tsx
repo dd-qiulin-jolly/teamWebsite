@@ -1258,31 +1258,31 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition, isMobile = 
 			{
 				name: "Abdo HASSAN",
 				role: "Human-Centric AI Manager",
-				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU LIKE TO GET AND SO ON",
+				bio: "I live on the intersection between design, poetry, and tech. Summer fruit supremacist 🍉🥭.",
 				img: "/profile-a.png",
 			},
 			{ 
 				name: "Qiulin JOLLY", 
 				role: "Creative Technologist", 
-				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU LIKE TO GET AND SO ON",
+				bio: "Fighting for better ways of being in the AI madness.",
 				img: "/profile-q.png" 
 			},
 			{ 
 				name: "Chiara DE NIGRIS ", 
 				role: "Creative Technologist", 
-				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU LIKE TO GET AND SO ON",
+				bio: "Creative data scientist & data driven storyteller.",
 				img: "/profile-c.png" 
 			},
 			{ 
 				name: "Jiaxin ZHANG", 
 				role: "Creative Technologist", 
-				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU LIKE TO GET AND SO ON",
+				bio: "Code by day, dancing by night. Dedicated to empowering women through AI.",
 				img: "/profile-j.png" 
 			},
 			{ 
 				name: "Henri VALETTE", 
 				role: "Software Developer Engineer", 
-				bio: "A SENTENCE BIO, LIKE THE BACKGROUND, INTEREST, WHAT PET YOU LIKE TO GET AND SO ON",
+				bio: "",
 				img: "/profile-h.png" 
 			},
 		];
