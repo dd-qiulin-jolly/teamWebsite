@@ -330,6 +330,66 @@ export default function Home() {
 	const [showOverlay, setShowOverlay] = useState(true);
 	const [hcHover, setHcHover] = useState(false);
 
+	// Mobile detection for all layout logic
+	const [isMobile, setIsMobile] = useState(false);
+	useEffect(() => {
+		function handleResize() {
+			setIsMobile(window.innerWidth <= 900);
+		}
+		handleResize();
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	}, []);
+
+	useEffect(() => {
+  const handleViewportChange = () => {
+    const isMobileViewport = window.innerWidth <= 900;
+
+    if (isMobileViewport) {
+      const titleElement = document.querySelector('[style*="fontSize: 20px"]') as HTMLElement;
+      if (titleElement) {
+        titleElement.style.marginTop = '40px';
+        console.log('Title margin adjusted for mobile viewport');
+      } else {
+        console.log('Title element not found');
+      }
+
+      const thumbnailElements = document.querySelectorAll('[class*="thumbnail"]');
+      if (thumbnailElements.length > 0) {
+        thumbnailElements.forEach((thumbnail) => {
+          (thumbnail as HTMLElement).style.border = 'none';
+        });
+        console.log('Thumbnail borders removed for mobile viewport');
+      } else {
+        console.log('Thumbnail elements not found');
+      }
+    } else {
+      console.log('Not a mobile viewport');
+    }
+  };
+
+  handleViewportChange();
+  window.addEventListener('resize', handleViewportChange);
+
+  return () => {
+    window.removeEventListener('resize', handleViewportChange);
+  };
+}, []);
+
+	useEffect(() => {
+  if (isMobile) {
+    const titleElement = document.querySelector('[style*="fontSize: 20px"]') as HTMLElement;
+    if (titleElement) {
+      titleElement.style.marginTop = '40px';
+    }
+
+    const thumbnailElements = document.querySelectorAll('[class*="thumbnail"]');
+    thumbnailElements.forEach((thumbnail) => {
+      (thumbnail as HTMLElement).style.border = 'none';
+    });
+  }
+}, [isMobile]);
+
 	return (
 		<div className="flex flex-col items-center min-h-screen bg-background text-foreground font-mono" style={{ cursor: 'none' }}>
 			{/* Responsive Top Bar */}
@@ -493,9 +553,9 @@ export default function Home() {
 				<div
 					id="what-we-do-section"
 					style={{
-						width: '86vw',
-						maxWidth: 1327,
-						height: 790, // 2/3 of 1185
+						width: isMobile ? '96vw' : '86vw',
+						maxWidth: isMobile ? '96vw' : 1327,
+						height: isMobile ? 1000 : 790, // Increased height for mobile
 						paddingTop: 1,
 						paddingBottom: 1,
 						background: '#E0E0E0', // match SectionFrame
@@ -504,8 +564,9 @@ export default function Home() {
 						flexDirection: 'column',
 						justifyContent: 'flex-start',
 						alignItems: 'center',
-						gap: 10,
-						margin: '40px auto 0 auto', // changed from negative to positive margin
+						gap: isMobile ? 4 : 10,
+						margin: isMobile ? '20px auto 0 auto' : '40px auto 0 auto',
+						...(isMobile ? { marginLeft: '2vw', marginRight: '2vw' } : {}),
 						position: 'relative',
 					}}
 				>
@@ -536,7 +597,7 @@ export default function Home() {
 								fontSize: 14,
 								fontFamily: 'Space Mono, monospace',
 								fontWeight: 400,
-							 textTransform: 'uppercase',
+								textTransform: 'uppercase',
 								letterSpacing: 1,
 								textAlign: 'center',
 								// Add padding to the header to prevent the title from overlapping the border
@@ -565,17 +626,16 @@ export default function Home() {
 				</div>
 
 				{/* Gap and connector: What we do → Section 2 */}
-				<div style={{ width: '100%', height: 320, position: 'relative' }}>
+				<div style={{ width: '100%', height: isMobile ? 120 : 320, position: 'relative' }}>
 				</div>
 				{/* Section 2 */}
 				<div id="section-2">
-					<SectionFrame title="OUR VALUES" cursorPosition={cursorPosition} />
+					<SectionFrame title="OUR VALUES" cursorPosition={cursorPosition} isMobile={isMobile} />
 				</div>
-				<div style={{ width: 2, height: 220, position: 'relative' }}>
-				</div>
+				<div style={{ width: 2, height: isMobile ? 110 : 220, position: 'relative' }}></div>
 				{/* Section 3 */}
 				<div id="section-3" style={{ marginBottom: 360 }}>
-					<SectionFrame title="PEOPLE" />
+					<SectionFrame title="PEOPLE" isMobile={isMobile} />
 				</div>
 				<Footer />
 			</div>
@@ -585,148 +645,233 @@ export default function Home() {
 
 // DraggableProjects component for three draggable frames
 function DraggableProjects() {
-	const initialPositions = [
-		{ x: 60, y: 80 },    // Project 1: top left
-		{ x: 220, y: 120 }, // Project 2: upper middle, overlaps 1
-		{ x: 340, y: 200 }, // Project 3: center, overlaps 2
-		{ x: 100, y: 320 }, // Project 4: lower left, not far right
-	];
-	const [positions, setPositions] = useState(initialPositions);
-	const [dragging, setDragging] = useState([-1, -1, -1, -1]);
-	const [offset, setOffset] = useState({ x: 0, y: 0 });
+  // All hooks must be called unconditionally
+  const projects = [
+    { name: "Labeling Platform", path: "/projects/project-one" },
+    { name: "Generative UI PoC", path: "/projects/project-two" },
+    { name: "GenAI Search", path: "/projects/project-three" },
+    { name: "Auto-complete", path: "/projects/project-four" },
+  ];
+  const frameW = 607 * 0.8; // ~486
+  const frameH = frameW * 9 / 16; // 16:9 ratio
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 900);
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-	const handleMouseDown = (idx: number, e: React.MouseEvent<HTMLDivElement>) => {
-		setDragging([idx, e.clientX, e.clientY]);
-		setOffset({
-			x: e.clientX - positions[idx].x,
-			y: e.clientY - positions[idx].y,
-		});
-		document.body.style.userSelect = "none";
-	};
-	const handleMouseUp = () => {
-		setDragging([-1, -1, -1, -1]);
-		document.body.style.userSelect = "auto";
-	};
-	const handleMouseMove = (e: MouseEvent) => {
-		if (dragging[0] !== -1) {
-			const idx = dragging[0];
-			const newPositions = [...positions];
-			newPositions[idx] = {
-				x: e.clientX - offset.x,
-				y: e.clientY - offset.y,
-			};
-			setPositions(newPositions);
-		}
-	};
-	useEffect(() => {
-		if (dragging[0] !== -1) {
-			window.addEventListener("mousemove", handleMouseMove);
-			window.addEventListener("mouseup", handleMouseUp);
-		} else {
-			window.removeEventListener("mousemove", handleMouseMove);
-			window.removeEventListener("mouseup", handleMouseUp);
-		}
-		return () => {
-			window.removeEventListener("mousemove", handleMouseMove);
-			window.removeEventListener("mouseup", handleMouseUp);
-		};
-	});
-	const projects = [
-  { name: "Labeling Platform", path: "/projects/project-one" },
-  { name: "Generative UI PoC", path: "/projects/project-two" },
-  { name: "GenAI Search", path: "/projects/project-three" },
-  { name: "Auto-complete", path: "/projects/project-four" },
-];
-	// 16:9 ratio, smaller (x0.8), less structured layout
-	const frameW = 607 * 0.8; // ~486
-	const frameH = frameW * 9 / 16; // 16:9 ratio
-	const defaultOffsets = [
-		{ x: 60, y: 80 },    // Project 1: top left
-		{ x: 220, y: 120 },  // Project 2: upper middle, overlaps 1
-		{ x: 340, y: 200 },  // Project 3: center, overlaps 2
-		{ x: 100, y: 320 },  // Project 4: lower left, not far right
-	];
-	return (
-		<div style={{ position: "relative", width: 900, height: 400 }}>
-			{projects.map((project, idx) => (
-				<div
-					key={project.name}
-					style={{
-						position: "absolute",
-						left: positions[idx]?.x ?? defaultOffsets[idx].x,
-						top: positions[idx]?.y ?? defaultOffsets[idx].y,
-						cursor: "grab",
-						zIndex: dragging[0] === idx ? 10 : 1,
-					}}
-					onMouseDown={e => handleMouseDown(idx, e)}
-				>
-					<div
-						style={{
-							width: frameW,
-							flexDirection: 'column',
-							justifyContent: 'flex-start',
-							alignItems: 'flex-start',
-							display: 'inline-flex',
-							fontFamily: 'Space Mono, monospace'
-						}}
-					>
-						<div
-							style={{
-								height: 34 * 0.8,
-								paddingLeft: 12 * 0.8,
-								paddingRight: 12 * 0.8,
-								paddingTop: 6 * 0.8,
-								paddingBottom: 6 * 0.8,
-								background: '#5241FF',
-								justifyContent: 'center',
-								alignItems: 'center',
-								gap: 10,
-								display: 'inline-flex',
-								cursor: 'pointer',
-							}}
-							onClick={e => {
-								e.stopPropagation();
-								window.open(project.path, '_blank');
-							}}
-						>
-							<div
-								style={{
-									color: 'white',
-									fontSize: 14,
-									fontFamily: 'Space Mono, monospace',
-									fontWeight: '400',
-									textTransform: 'uppercase',
-									lineHeight: '18px',
-									wordWrap: 'break-word',
-									display: 'flex',
-									alignItems: 'center',
-									gap: 6,
-								}}
-							>
-								{project.name}
-								<Image src="/outward.svg" alt="outward arrow" width={16} height={16} style={{ marginLeft: 4, marginBottom: 2 }} />
-							</div>
-						</div>
-						<div style={{ alignSelf: 'stretch', height: frameH, position: 'relative', border: '1px #5241FF solid', overflow: 'hidden', background: '#fff' }}>
-							{project.name === "GenAI Search" ? (
-								<Image src="/gen-ai-search-3.png" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
-							) : project.name === "Generative UI PoC" ? (
-								<Image src="/gen-ui-3.png" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
-							) : project.name === "Labeling Platform" ? (
-								<Image src="/label-1.png" alt="project preview" fill style={{ objectFit: 'cover', aspectRatio: '16/9', pointerEvents: 'none' }} />
-							) : (
-								<Image src="/placeholder.jpg" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
-							)}
-						</div>
-					</div>
-				</div>
-			))}
-		</div>
-	);
+  // Desktop draggable hooks
+  const initialPositions = [
+    { x: 60, y: 80 },    // Project 1: top left
+    { x: 220, y: 120 }, // Project 2: upper middle, overlaps 1
+    { x: 340, y: 200 }, // Project 3: center, overlaps 2
+    { x: 100, y: 320 }, // Project 4: lower left, not far right
+  ];
+  const [positions, setPositions] = useState(initialPositions);
+  const [dragging, setDragging] = useState([-1, -1, -1, -1]);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const handleMouseDown = (idx: number, e: React.MouseEvent<HTMLDivElement>) => {
+    setDragging([idx, e.clientX, e.clientY]);
+    setOffset({
+      x: e.clientX - positions[idx].x,
+      y: e.clientY - positions[idx].y,
+    });
+    document.body.style.userSelect = "none";
+  };
+  const handleMouseUp = () => {
+    setDragging([-1, -1, -1, -1]);
+    document.body.style.userSelect = "auto";
+  };
+  const handleMouseMove = (e: MouseEvent) => {
+    if (dragging[0] !== -1) {
+      const idx = dragging[0];
+      const newPositions = [...positions];
+      newPositions[idx] = {
+        x: e.clientX - offset.x,
+        y: e.clientY - offset.y,
+      };
+      setPositions(newPositions);
+    }
+  };
+  useEffect(() => {
+    if (dragging[0] !== -1) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    } else {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    }
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  });
+  const defaultOffsets = [
+    { x: 60, y: 80 },    // Project 1: top left
+    { x: 220, y: 120 },  // Project 2: upper middle, overlaps 1
+    { x: 340, y: 200 },  // Project 3: center, overlaps 2
+    { x: 100, y: 320 },  // Project 4: lower left, not far right
+  ];
+
+  // Render logic
+  if (isMobile) {
+    // Vertical stacking layout for mobile
+    // Use 3/5 scale for frameW and frameH
+    const mobileScale = 0.6;
+    const mobileFrameW = frameW * mobileScale;
+    const mobileFrameH = frameH * mobileScale;
+    const outwardIconSize = 26 * mobileScale;
+    return (
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 12, marginTop: -24 }}>
+        {projects.map((project, idx) => (
+          <div
+            key={project.name}
+            style={{
+              width: mobileFrameW,
+              maxWidth: '100vw',
+              margin: '0 auto',
+              background: 'transparent', // Remove white background for mobile only
+              border: 'none',
+              borderRadius: 0,
+              overflow: 'hidden',
+              boxShadow: 'none',
+              display: 'flex',
+              flexDirection: 'column',
+              transform: idx % 2 === 0 ? `rotate(0deg)` : `rotate(0deg)`,
+              transition: 'transform 0.2s',
+              marginTop: idx === 0 ? 0 : 12,
+            }}
+          >
+            <div
+              style={{
+                height: 50 * mobileScale, // Increased height for blue part on mobile
+                paddingLeft: 12 * mobileScale,
+                paddingRight: 12 * mobileScale,
+                paddingTop: 6 * mobileScale,
+                paddingBottom: 6 * mobileScale,
+                background: '#5241FF',
+                justifyContent: 'flex-start', // Left align content
+                alignItems: 'center',
+                gap: 10,
+                display: 'flex',
+                cursor: 'pointer',
+                width: 'fit-content', // Only fill width according to text
+                minWidth: 0,
+                maxWidth: '100%',
+              }}
+              onClick={e => {
+                e.stopPropagation();
+                window.open(project.path, '_blank');
+              }}
+            >
+              <span style={{ color: 'white', fontSize: 28 * mobileScale, fontFamily: 'Space Mono, monospace', fontWeight: '400', textTransform: 'uppercase', lineHeight: '32px', wordWrap: 'break-word', display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'flex-start' }}>
+                {project.name}
+                <Image src="/outward.svg" alt="outward arrow" width={outwardIconSize} height={outwardIconSize} style={{ marginLeft: 2, marginBottom: 0, marginTop: '-5px' }} />
+              </span>
+            </div>
+            <div style={{ width: '100%', height: mobileFrameH, position: 'relative', overflow: 'hidden', background: '#fff' }}>
+              {project.name === "GenAI Search" ? (
+                <Image src="/gen-ai-search-3.png" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+              ) : project.name === "Generative UI PoC" ? (
+                <Image src="/gen-ui-3.png" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+              ) : project.name === "Labeling Platform" ? (
+                <Image src="/label-1.png" alt="project preview" fill style={{ objectFit: 'cover', aspectRatio: '16/9', pointerEvents: 'none' }} />
+              ) : (
+                <Image src="/placeholder.jpg" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Desktop/tablet draggable layout
+  return (
+    <div style={{ position: "relative", width: 900, height: 400 }}>
+      {projects.map((project, idx) => (
+        <div
+          key={project.name}
+          style={{
+            position: "absolute",
+            left: positions[idx]?.x ?? defaultOffsets[idx].x,
+            top: positions[idx]?.y ?? defaultOffsets[idx].y,
+            cursor: "grab",
+            zIndex: dragging[0] === idx ? 10 : 1,
+          }}
+          onMouseDown={e => handleMouseDown(idx, e)}
+        >
+          <div
+            style={{
+              width: frameW,
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
+              alignItems: 'flex-start',
+              display: 'inline-flex',
+              fontFamily: 'Space Mono, monospace'
+            }}
+          >
+            <div
+              style={{
+                height: 34 * 0.8,
+                paddingLeft: 12 * 0.8,
+                paddingRight: 12 * 0.8,
+                paddingTop: 6 * 0.8,
+                paddingBottom: 6 * 0.8,
+                background: '#5241FF',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 10,
+                display: 'inline-flex',
+                cursor: 'pointer',
+              }}
+              onClick={e => {
+                e.stopPropagation();
+                window.open(project.path, '_blank');
+              }}
+            >
+              <div
+                style={{
+                  color: 'white',
+                  fontSize: 14,
+                  fontFamily: 'Space Mono, monospace',
+                  fontWeight: '400',
+                  textTransform: 'uppercase',
+                  lineHeight: '18px',
+                  wordWrap: 'break-word',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                }}
+              >
+                {project.name}
+                <Image src="/outward.svg" alt="outward arrow" width={16} height={16} style={{ marginLeft: 4, marginBottom: 2 }} />
+              </div>
+            </div>
+            <div style={{ alignSelf: 'stretch', height: frameH, position: 'relative', border: '1px #5241FF solid', overflow: 'hidden', background: '#fff' }}>
+              {project.name === "GenAI Search" ? (
+                <Image src="/gen-ai-search-3.png" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+              ) : project.name === "Generative UI PoC" ? (
+                <Image src="/gen-ui-3.png" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+              ) : project.name === "Labeling Platform" ? (
+                <Image src="/label-1.png" alt="project preview" fill style={{ objectFit: 'cover', aspectRatio: '16/9', pointerEvents: 'none' }} />
+              ) : (
+                <Image src="/placeholder.jpg" alt="project preview" fill style={{ objectFit: 'cover', pointerEvents: 'none' }} />
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 // SectionFrame component for individual section frames
-function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: string, cursorPosition?: { x: number, y: number } }) {
+function SectionFrame({ title, cursorPosition: globalCursorPosition, isMobile = false }: { title: string, cursorPosition?: { x: number, y: number }, isMobile?: boolean }) {
 	// State for reticule cursor - moved to top level
 	const [valuesHovering, setValuesHovering] = useState(false);
 	const [targetDimensions, setTargetDimensions] = useState({ width: 40, height: 40 });
@@ -791,6 +936,28 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 			{ icon: "/icon-4.svg", keyword: "Tech x Design", statement: "Designers + techies = magic. We blend skills to create simple, useful tools." },
 			{ icon: "/icon-5.svg", keyword: "Playfulness", statement: "We keep curiosity loud and fun alive, whether we’re prototyping or hacking together ideas." },
 		];
+
+		// Shrink styles for mobile
+		const valueBlockStyleMobile = {
+			width: '90vw',
+			borderRadius: 8,
+			padding: '10px 12px',
+			gap: 12,
+			marginBottom: 16,
+		};
+		const iconStyleMobile = {
+			width: 86,
+			height: 86,
+			flexShrink: 0,
+		};
+		const keywordStyleMobile = {
+			fontSize: 13,
+			marginBottom: 2,
+		};
+		const statementStyleMobile = {
+			fontSize: 11,
+			maxWidth: 220,
+		};
 
 		return (
 			<>
@@ -932,9 +1099,9 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 				)}
 				<div
 					style={{
-						width: '86vw',
-						maxWidth: 1327,
-						height: 900,
+						width: isMobile ? '96vw' : '86vw',
+						maxWidth: isMobile ? '96vw' : 1327,
+						height: isMobile ? 760 : 900, // Shorter height for mobile
 						paddingTop: 1,
 						paddingBottom: 1,
 						background: '#E0E0E0',
@@ -942,7 +1109,8 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 						display: 'flex',
 						flexDirection: 'column',
 						alignItems: 'center',
-						margin: '0 auto',
+						margin: isMobile ? '20px auto 0 auto' : '0 auto',
+						...(isMobile ? { marginLeft: '2vw', marginRight: '2vw' } : {}),
 						position: 'relative',
 					}}
 				>
@@ -991,18 +1159,14 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 						</div>
 					</div>
 					{/* Five value blocks with hover handlers */}
-					<div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 16, marginTop: 40, cursor: valuesHovering ? 'none' : 'auto' }}>
+					<div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: isMobile ? 8 : 16, marginTop: isMobile ? 4 : 40, cursor: valuesHovering ? 'none' : 'auto' }}>
 						{values.map((v, i) => (
 							<div
 								key={i}
 								style={{
 									display: 'flex',
 									alignItems: 'center',
-									width: 520,
-									borderRadius: 12,
-									padding: '18px 32px',
-									gap: 32,
-									marginBottom: i === values.length - 1 ? 48 : 0,
+									...(isMobile ? valueBlockStyleMobile : { width: 520, borderRadius: 12, padding: '18px 32px', gap: 32, marginBottom: i === values.length - 1 ? 48 : 0 }),
 									backgroundColor: 'transparent',
 									border: 'none',
 									transition: 'all 0.3s ease',
@@ -1016,10 +1180,10 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 								}}
 								onMouseOver={e => e.stopPropagation()}
 							>
-								<Image src={v.icon} alt="icon" width={100} height={100} style={{ flexShrink: 0 }} />
+								<Image src={v.icon} alt="icon" {...(isMobile ? iconStyleMobile : { width: 100, height: 100 })} style={{ flexShrink: 0 }} />
 								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-									<div style={{ fontSize: 20, fontWeight: 400, color: '#000', marginBottom: 4, textTransform: 'uppercase', fontFamily: 'Space Mono, monospace' }}>{v.keyword}</div>
-									<div style={{ fontSize: 14, color: '#000', maxWidth: 380, fontFamily: 'Space Mono, monospace' }}>{v.statement}</div>
+									<div style={{ fontWeight: 400, color: '#000', textTransform: 'uppercase', fontFamily: 'Space Mono, monospace', ...(isMobile ? keywordStyleMobile : { fontSize: 20, marginBottom: 4 }) }}>{v.keyword}</div>
+									<div style={{ color: '#000', fontFamily: 'Space Mono, monospace', ...(isMobile ? statementStyleMobile : { fontSize: 14, maxWidth: 380 }) }}>{v.statement}</div>
 								</div>
 							</div>
 						))}
@@ -1092,7 +1256,7 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 		return (
 			<div
 				style={{
-					width: '86vw',
+					width: isMobile ? '96vw' : '86vw',
 					maxWidth: 1327,
 					minHeight: 'auto',
 					background: '#E0E0E0',
@@ -1100,7 +1264,8 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
-					margin: '80px auto 0 auto',
+					margin: isMobile ? '20px auto 0 auto' : '80px auto 0 auto',
+					...(isMobile ? { marginLeft: '2vw', marginRight: '2vw' } : {}),
 					position: 'relative',
 				}}
 			>
@@ -1129,11 +1294,11 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 							fontSize: 14,
 							fontFamily: 'Space Mono, monospace',
 							fontWeight: 400,
-							textTransform: 'uppercase',
+							textTransform: "uppercase",
 							letterSpacing: 1,
-							textAlign: 'center',
+							textAlign: "center",
 							// Add padding to the header to prevent the title from overlapping the border
-							padding: '0 24px',
+							padding: "0 24px",
 							// Add zIndex to the header to ensure it sits above the border
 							zIndex: 1,
 							border: 'none',
@@ -1225,8 +1390,8 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 	return (
 		<div
 			style={{
-				width: '86vw',
-				maxWidth: 1327,
+				width: isMobile ? '96vw' : '86vw',
+				maxWidth: isMobile ? '96vw' : 1327,
 				height: 900,
 				paddingTop: 1,
 				paddingBottom: 1,
@@ -1235,7 +1400,8 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition }: { title: 
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
-				margin: '0 auto',
+				margin: isMobile ? '20px auto 0 auto' : '0 auto',
+				...(isMobile ? { marginLeft: '2vw', marginRight: '2vw' } : {}),
 				position: 'relative',
 			}}
 		>
