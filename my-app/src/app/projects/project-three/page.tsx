@@ -6,13 +6,34 @@ import { useRouter } from "next/navigation";
 function Nav() {
   const [hcHover, setHcHover] = React.useState(false);
   const router = useRouter();
+  // Responsive font size for mobile
+  const [isMobile, setIsMobile] = React.useState(false);
+  React.useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 900);
+    }
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   return (
     <div
       className="w-full flex justify-between items-start mt-6 mb-16 px-1 sm:px-2 lg:px-4"
       style={{ maxWidth: 1382, position: "relative" }}
     >
       <div
-        style={{ width: 258, color: hcHover ? "#8F85FF" : "#C6C6C6", fontSize: 20, fontFamily: "Space Mono, monospace", fontWeight: 400, textTransform: "uppercase", lineHeight: "24px", wordWrap: "break-word", cursor: "pointer", transition: "color 0.15s" }}
+        style={{
+          width: 258,
+          color: hcHover ? "#8F85FF" : "#C6C6C6",
+          fontSize: isMobile ? 16 : 20,
+          fontFamily: "Space Mono, monospace",
+          fontWeight: 400,
+          textTransform: "uppercase",
+          lineHeight: "24px",
+          wordWrap: "break-word",
+          cursor: "pointer",
+          transition: "color 0.15s"
+        }}
         onMouseEnter={() => setHcHover(true)}
         onMouseLeave={() => setHcHover(false)}
         onClick={() => router.push("/")}
@@ -220,7 +241,7 @@ export default function ProjectThree() {
         {isMobile ? (
           <div style={{ width: '100%', maxWidth: 600, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 32, paddingLeft: 4, paddingRight: 4 }}>
             {/* Image Gallery on top */}
-            <div ref={imageFrameRef} className="w-full h-full overflow-hidden" style={{ maxHeight: '1400px', minHeight: '400px', height: 'auto' }}>
+            <div ref={imageFrameRef} className="w-full h-full overflow-hidden" style={{ minHeight: '400px', height: 'auto' }}>
               <div className="grid grid-cols-8 gap-4 items-start justify-center">
                 {[1,2,3,4,5,6,7].map(i => (
                   <img
