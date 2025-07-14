@@ -479,7 +479,7 @@ export default function Home() {
 						alignSelf: "stretch",
 						textAlign: "right",
 						color: "#8F85FF",
-						fontSize: isMobile ? 16 : 20,
+						fontSize: 20,
 						fontFamily: "Space Mono, monospace",
 						fontWeight: 400,
 						textTransform: "uppercase",
