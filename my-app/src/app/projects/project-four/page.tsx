@@ -265,8 +265,8 @@ export default function ProjectFour() {
                 <div className="col-span-1" />
                 <div className="col-span-3">
                   <p className="font-mono text-[14px] text-black">
-                    Our initial research showed that customers' search behaviours come with a variety of intention, this ranges from specific to general, and from mission critical to exploratory. The task of the autocomplete here is two fold, first to expand the search space for the user by finding relevant yet unexplored candidates. Second, is to provide the user with high performing queries, increasing their chance of finding the right product.
-The autosuggest leverages a hybrid approach so that it can remain precise, fast, relevant but still serendipitous. 
+                    Our initial research showed that customers&apos; search behaviours come with a variety of intention, this ranges from specific to general, and from mission critical to exploratory. The task of the autocomplete here is two fold, first to expand the search space for the user by finding relevant yet unexplored candidates. Second, is to provide the user with high performing queries, increasing their chance of finding the right product.
+                    The autosuggest leverages a hybrid approach so that it can remain precise, fast, relevant but still serendipitous.
                   </p>
                 </div>
               </div>
@@ -335,8 +335,8 @@ The autosuggest leverages a hybrid approach so that it can remain precise, fast,
                 <div className="col-span-1" />
                 <div className="col-span-3">
                   <p className="font-mono text-[14px] text-black">
-                    Our initial research showed that customers' search behaviours come with a variety of intention, this ranges from specific to general, and from mission critical to exploratory. The task of the autocomplete here is two fold, first to expand the search space for the user by finding relevant yet unexplored candidates. Second, is to provide the user with high performing queries, increasing their chance of finding the right product.
-The autosuggest leverages a hybrid approach so that it can remain precise, fast, relevant but still serendipitous. 
+                    Our initial research showed that customers&apos; search behaviours come with a variety of intention, this ranges from specific to general, and from mission critical to exploratory. The task of the autocomplete here is two fold, first to expand the search space for the user by finding relevant yet unexplored candidates. Second, is to provide the user with high performing queries, increasing their chance of finding the right product.
+                    The autosuggest leverages a hybrid approach so that it can remain precise, fast, relevant but still serendipitous.
                   </p>
                 </div>
               </div>
