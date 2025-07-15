@@ -1282,7 +1282,7 @@ function SectionFrame({ title, cursorPosition: globalCursorPosition, isMobile = 
 			{ 
 				name: "Henri VALETTE", 
 				role: "Software Developer Engineer", 
-				bio: "",
+				bio: "Frontend Developer",
 				img: "/profile-h.png" 
 			},
 		];
