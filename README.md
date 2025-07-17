@@ -1,2 +1,2 @@
-# teamWebsite
+# Human-Centric AI team Website
 
